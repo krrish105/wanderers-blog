@@ -1,0 +1,126 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(36, 35, 35);
+  color: white;
+}
+
+header {
+  background-image: url('./hero-image.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+}
+.hero-bg-overlay {
+  background-color: rgba(5, 5, 5, 0.1);
+}
+
+.login-page-bg {
+  background-image: url('./login-page.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+}
+
+.error-container {
+  border-radius: 0.5rem;
+  border: 1px solid white;
+  color: white;
+}
+.error-container,
+.error-container img {
+  height: 400px;
+}
+.error-container img {
+  width: 100%;
+  object-fit: cover;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+.error-right-part {
+  padding: 1.5rem;
+}
+.error-right-part div {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+.error-right-part a {
+  display: block;
+  text-align: center;
+  border: 1px solid white;
+  padding: 0.5rem 2rem;
+  margin: 2rem auto 0;
+  width: fit-content;
+}
+.error-container,
+.login-register-container {
+  display: grid;
+  align-items: center;
+  place-content: center;
+  max-width: 64rem;
+  margin: 0 auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.login-register-container {
+  height: 500px;
+}
+.login-register-container > div:first-of-type {
+  --tw-bg-opacity: 1;
+  background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+  width: 100%;
+  padding: 3rem;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+}
+.login-register-container > div {
+  height: inherit;
+}
+.login-register-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.login-register-container form button {
+  border: 1px solid white;
+  width: fit-content;
+  padding: 0.25rem 6rem;
+  margin: 2.25rem auto 0;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+.login-register-heading {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.user-menu {
+  position: absolute;
+  right: 0.25rem;
+  top: 3rem;
+  z-index: 20;
+  background-color: rgba(30, 41, 59, 1);
+  padding: 1rem 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.user-menu button,
+.user-menu a {
+  border-radius: 0.375rem;
+  margin: 0 2rem;
+}
+.register-options {
+  display: flex;
+  gap: 0.75rem;
+}
+.register-options a {
+  border: 0.5px solid white;
+  border-radius: 0.375rem;
+  padding: 0 1.5rem;
+}
