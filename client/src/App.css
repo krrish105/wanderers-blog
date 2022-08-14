@@ -10,7 +10,7 @@ body {
 }
 
 header {
-  background-image: url('./hero-image.jpg');
+  background-image: url('./assets/hero-image.jpg');
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-attachment: fixed;
@@ -20,7 +20,7 @@ header {
 }
 
 .login-page-bg {
-  background-image: url('./login-page.jpg');
+  background-image: url('./assets/login-page.jpg');
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-attachment: fixed;

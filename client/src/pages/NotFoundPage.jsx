@@ -1,4 +1,4 @@
-import errorGif from '../404-error.gif';
+import errorGif from '../assets/404-error.gif';
 
 const NotFoundPage = ({ error }) => {
   return (

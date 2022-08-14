@@ -1,4 +1,4 @@
-import errorGif from '../error.gif';
+import errorGif from '../assets/error.gif';
 
 const ErrorPage = ({ error }) => {
   return (
