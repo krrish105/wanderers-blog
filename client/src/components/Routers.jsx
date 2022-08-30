@@ -5,7 +5,12 @@ import Register from '../pages/Register';
 import Layout from '../pages/Layout';
 import ErrorPage from '../pages/ErrorPage';
 import NotFoundPage from '../pages/NotFoundPage';
+import EditUserPage from '../pages/EditUserPage';
+import VerifyEmail from '../pages/VerifyEmail';
+import BlogPage from '../pages/BlogPage';
 import UserPage from '../pages/UserPage';
+import CreateBlogPage from '../pages/CreateBlogPage';
+import ResetPassword from '../pages/ResetPassword';
 
 const Routers = () => {
   return (
@@ -13,7 +18,20 @@ const Routers = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
+          <Route
+            exact
+            path="/user/verify-email"
+            element={<VerifyEmail />}
+          ></Route>
+          <Route exact path="/user/:id/edit" element={<EditUserPage />}></Route>
           <Route exact path="/user/:id" element={<UserPage />}></Route>
+          <Route
+            exact
+            path="/user/reset-password"
+            element={<ResetPassword />}
+          ></Route>
+          <Route exact path="/blogs/:id" element={<BlogPage />}></Route>
+          <Route exact path="/create/blog" element={<CreateBlogPage />}></Route>
         </Route>
         <Route exact path="/login" element={<Login />}></Route>
         <Route exact path="/register" element={<Register />}></Route>

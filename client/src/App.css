@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   margin: 0;
   padding: 0;
@@ -5,8 +9,55 @@
 }
 
 body {
-  background-color: rgb(36, 35, 35);
+  scroll-behavior: smooth;
   color: white;
+  position: relative;
+}
+
+body,
+nav {
+  background-color: rgb(36, 35, 35);
+}
+
+/* Mixins */
+.flex-center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.absolute-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.flex-col-direction {
+  display: flex;
+  flex-direction: column;
+}
+.flex-justify-between {
+  display: flex;
+  justify-content: space-between;
+}
+.blog-preview h2 {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+.blog-preview h3 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+.blog-preview pre {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  margin-top: 1.5rem;
 }
 
 header {
@@ -63,10 +114,18 @@ header {
   place-content: center;
   max-width: 64rem;
   margin: 0 auto;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 .login-register-container {
   height: 500px;
+}
+@media (min-width: 768px) {
+  .login-register-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+    height: 100%;
+  }
 }
 .login-register-container > div:first-of-type {
   --tw-bg-opacity: 1;
@@ -123,4 +182,67 @@ header {
   border: 0.5px solid white;
   border-radius: 0.375rem;
   padding: 0 1.5rem;
+}
+.about-user-section {
+  margin: 1rem 0;
+}
+.about-user-section > div {
+  min-height: 18rem;
+  height: fit-content;
+  border: 1px solid white;
+}
+.about-user-section > h2 {
+  font-size: 1.5rem /* 24px */;
+  line-height: 2rem /* 32px */;
+  margin-bottom: 1.25rem;
+}
+.user-info-actions {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem /* 16px */;
+  line-height: 1.5rem /* 24px */;
+}
+.user-info-actions > a,
+.user-info-actions > button {
+  border: 1px solid white;
+  padding: 0.25rem 1.5rem;
+}
+
+.text-overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: block;
+}
+
+.login-page-bg-overlay {
+  background-color: black;
+}
+
+.edit-user-container {
+  display: grid;
+  grid-template-columns: auto;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .edit-user-container {
+    grid-template-columns: 30% 70%;
+    gap: 0;
+  }
+}
+.modal-container {
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  float: left;
+  left: 50%;
+  top: 105%;
+  transform: translate(-44%, 0%);
+}
+
+.homepage-blog-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 325px);
+  place-content: center;
 }

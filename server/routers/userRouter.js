@@ -11,7 +11,7 @@ import {
 
 router
 	.route("/:id")
-	.get(authenticateUser, authorize, getUser)
+	.get(authenticateUser, getUser)
 	.patch(authenticateUser, authorize, editUser)
 	.delete(authenticateUser, authorize, deleteUser);
 

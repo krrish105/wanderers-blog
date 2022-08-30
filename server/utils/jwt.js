@@ -2,23 +2,45 @@ import jsonwebtoken from "jsonwebtoken";
 const { sign, verify } = jsonwebtoken;
 
 const createJWT = ({ payload }) => {
-	return sign(payload, process.env.JWT_SECRET, {
-		expiresIn: process.env.JWT_LIFESPAN,
-	});
+	const token = sign(payload, process.env.JWT_SECRET);
+	return token;
 };
 
-const verifyJWT = ({ token }) => verify(token, process.env.JWT_SECRET);
+const verifyJWT = (token) => verify(token, process.env.JWT_SECRET);
 
-const generateCookiesToken = ({ res, payload }) => {
-	const token = createJWT({ payload });
+// const attachSingleCookieToResponse = ({ res, payload }) => {
+// 	const token = createJWT({ payload });
+// 	const oneDay = 1000 * 60 * 60 * 24;
+// 	res.cookie("token", token, {
+// 		httpOnly: true,
+// 		expires: new Date(Date.now() + oneDay),
+// 		secure: process.env.NODE_ENV === "production",
+// 		signed: true,
+// 		sameSite: false,
+// 	});
+// };
+
+// Access token: we will just have the user info, will have short expiration time
+// Refresh token: we will have user as well as refresh token  string value, will have long expiration time
+const attachCookiesToResponse = ({ res, user, refreshToken }) => {
+	const accessTokenJWT = createJWT({ payload: { user } });
+	const refresTokenJWT = createJWT({ payload: { user, refreshToken } });
+
 	const oneDay = 1000 * 60 * 60 * 24;
-	res.cookie("token", token, {
+
+	res.cookie("accessToken", accessTokenJWT, {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		signed: true,
+		maxAge: 1000 * 60 * 15,
+	});
+
+	res.cookie("refreshToken", refresTokenJWT, {
 		httpOnly: true,
 		expires: new Date(Date.now() + oneDay),
 		secure: process.env.NODE_ENV === "production",
 		signed: true,
-		sameSite: false,
 	});
 };
 
-export { createJWT, verifyJWT, generateCookiesToken };
+export { createJWT, verifyJWT, attachCookiesToResponse };

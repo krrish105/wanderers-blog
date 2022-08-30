@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 config({ path: "./.env" });
-
+import "express-async-errors";
 const port = process.env.PORT || 3001;
 import express, { json } from "express";
 import cors from "cors";

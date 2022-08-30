@@ -5,17 +5,12 @@ import {
 	getAllBlogs,
 	getBlog,
 	createBlog,
-	updateBlog,
 	deleteBlog,
 } from "../controllers/blogsController.js";
 
 router.route("/").get(getAllBlogs);
 router.route("/create").post(authenticateUser, createBlog);
-router
-	.route("/:id")
-	.get(getBlog)
-	.patch(authenticateUser, updateBlog)
-	.delete(authenticateUser, deleteBlog);
+router.route("/:id").get(getBlog).delete(authenticateUser, deleteBlog);
 
-// except getALlBlogs, all other methods require authentication
+// except getALlBlogs and getBlog, all other methods require authentication
 export default router;

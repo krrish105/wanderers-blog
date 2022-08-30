@@ -9,11 +9,11 @@ const BlogSchema = new Schema(
 			trim: true,
 			minlength: 3,
 		},
-		image: {
-			type: String,
-			required: [true, "Please provide a title"],
-			trim: true,
-		},
+		// image: {
+		// 	type: String,
+		// 	required: [true, "Please provide a title"],
+		// 	trim: true,
+		// },
 		locationName: {
 			type: String,
 			required: [true, "Please provide a location name"],
@@ -28,7 +28,7 @@ const BlogSchema = new Schema(
 			],
 		},
 		author: {
-			type: Schema.ObjectId,
+			type: Schema.Types.ObjectId,
 			ref: "User",
 			required: [true, "Please provide the author name"],
 		},

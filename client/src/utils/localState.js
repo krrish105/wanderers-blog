@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 
 const useLocalState = () => {
   const [alert, setAlert] = useState({
@@ -6,7 +7,7 @@ const useLocalState = () => {
     text: '',
     type: 'danger',
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
 
   const showAlert = ({ text, type = 'danger' }) => {

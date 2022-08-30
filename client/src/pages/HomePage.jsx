@@ -1,9 +1,12 @@
-import Header from '../components/Header';
+import BlogsPart from '../components/BlogsPart';
 
-const HomePage = ({ token }) => {
+const HomePage = () => {
   return (
     <div className="w-full">
-      <Header />
+      {/* <header className="h-[90vh] relative">
+        <div className="absolute-fill hero-bg-overlay"></div>
+      </header> */}
+      <BlogsPart />
     </div>
   );
 };

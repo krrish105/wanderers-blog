@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import InputComponent from '../components/InputComponent';
-import LoginPageRight from '../components/LoginPageRight';
+import RegisterFlowLayout from '../components/RegisterFlowLayout';
 import axios from 'axios';
 import { useGlobalContext } from '../utils/contextHook';
 import useLocalState from '../utils/localState';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
-  const { saveUser } = useGlobalContext();
+  const { isLoading, user, saveUser } = useGlobalContext();
   const { alert, showAlert, loading, setLoading, hideAlert } = useLocalState();
   const [formData, setFormData] = useState({
     email: '',
@@ -26,10 +27,12 @@ const Login = () => {
     setLoading(true);
     const { email, password } = formData;
     const loginUser = { email, password };
+    if (!email || !password) {
+      return false;
+    }
     try {
       const { data } = await axios.post('/auth/login', loginUser);
-      console.log(data);
-      if (data && data.msg === 'Logged In') {
+      if (data && data.status === 'Logged In') {
         setFormData({ email: '', password: '' });
         showAlert({
           text: `Welcome ${data.tokenUser.username}. Redirecting to HomePage...`,
@@ -40,36 +43,46 @@ const Login = () => {
         window.location = '/';
       }
     } catch (error) {
-      window.location = '/error';
+      const { msg } = error.response.data;
+      showAlert({ text: msg || 'there was an error', type: 'danger' });
     }
   };
 
+  useEffect(() => {
+    document.title = "Login | Wanderer's Blog";
+    if (!isLoading) {
+      if (user) {
+        window.location = '/';
+      }
+    }
+  }, [isLoading]);
+
   return (
-    <main className="login-register-container">
-      <div>
-        <div className="login-register-heading">Login</div>
-        <div>
-          <form action="/auth/login" method="POST" onSubmit={submitHandler}>
-            <InputComponent
-              id="email"
-              type="email"
-              label="Email:"
-              value={formData.email}
-              inputHandler={inputHandler}
-            />
-            <InputComponent
-              id="password"
-              type="password"
-              label="Password:"
-              value={formData.password}
-              inputHandler={inputHandler}
-            />
-            <button type="submit">Login</button>
-          </form>
-        </div>
-      </div>
-      <LoginPageRight />
-    </main>
+    <RegisterFlowLayout title={Login}>
+      <form action="/auth/login" method="POST" onSubmit={submitHandler}>
+        <InputComponent
+          id="email"
+          type="email"
+          label="Email:"
+          value={formData.email}
+          inputHandler={inputHandler}
+          placeholder="example@email.com"
+          isRequired={true}
+        />
+        <InputComponent
+          id="password"
+          type="password"
+          label="Password:"
+          value={formData.password}
+          inputHandler={inputHandler}
+          isRequired={true}
+        />
+        <button type="submit">Login</button>
+        <Link to="/user/reset-password" className="underline text-lg">
+          Forgot password?
+        </Link>
+      </form>
+    </RegisterFlowLayout>
   );
 };
 

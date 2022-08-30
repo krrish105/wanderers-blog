@@ -1,10 +1,15 @@
 import User from "../models/userModel.js";
+import Token from "../models/tokenModel.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, UnauthenticatedError } from "../errors/index.js";
-import { generateCookiesToken, createTokenUser } from "../utils/index.js";
+import {
+	attachCookiesToResponse,
+	createTokenUser,
+	sendVerificationEmail,
+} from "../utils/index.js";
+import { randomBytes } from "crypto";
 
 const register = async (req, res) => {
-	console.log(req.body);
 	const { name, email, password } = req.body;
 
 	let isUser = await User.find({ email });
@@ -14,10 +19,42 @@ const register = async (req, res) => {
 		throw new BadRequestError("Already an user.");
 	}
 
-	const user = await User.create({ name, email, password });
-	const tokenUser = createTokenUser(user);
-	generateCookiesToken({ res, payload: tokenUser });
-	res.status(StatusCodes.CREATED).json({ msg: "Registered", tokenUser });
+	const verificationToken = randomBytes(40).toString("hex");
+	const user = await User.create({ name, email, password, verificationToken });
+
+	const origin = "http://localhost:3000";
+	await sendVerificationEmail({
+		name: user.name,
+		email: user.email,
+		verificationToken: user.verificationToken,
+		origin,
+	});
+	res.status(StatusCodes.CREATED).json({ status: "Registered" });
+};
+
+const verifyEmail = async (req, res) => {
+	const { verificationToken, email } = req.body;
+	if (!verificationToken || !email) {
+		throw new CustomError.BadRequestError(
+			"Please provide a verification token and email"
+		);
+	}
+	const user = await User.findOne({ email });
+	if (!user) {
+		throw new UnauthenticatedError("verification failed");
+	}
+	if (user.verificationToken !== verificationToken) {
+		throw new UnauthenticatedError("verification failed");
+	}
+
+	user.isVerified = true;
+	user.verified = Date.now();
+	user.verificationToken = "";
+	await user.save();
+
+	res.status(StatusCodes.OK).json({
+		status: "Email verified",
+	});
 };
 
 const login = async (req, res) => {
@@ -38,9 +75,28 @@ const login = async (req, res) => {
 		throw new UnauthenticatedError("Invalid credentials");
 	}
 
+	if (!user.isVerified) {
+		throw new UnauthenticatedError("Please verify your email");
+	}
+
 	const tokenUser = createTokenUser(user);
-	generateCookiesToken({ res, payload: tokenUser });
-	res.status(StatusCodes.OK).json({ msg: "Logged In", tokenUser });
+	let refreshToken = "";
+	const existingToken = await Token.findOne({ user: user._id });
+	if (existingToken) {
+		const { isValid } = existingToken;
+		if (!isValid) {
+			throw new UnauthenticatedError("Invalid credentials");
+		}
+		refreshToken = existingToken.refreshToken;
+	} else {
+		refreshToken = randomBytes(40).toString("hex");
+		const userAgent = req.headers["user-agent"];
+		const ip = req.ip;
+		const userToken = { refreshToken, ip, userAgent, user: user._id };
+		await Token.create(userToken);
+	}
+	attachCookiesToResponse({ res, user: tokenUser, refreshToken });
+	res.status(StatusCodes.OK).json({ status: "Logged In", tokenUser });
 };
 
 const logout = (req, res) => {
@@ -55,7 +111,7 @@ const logout = (req, res) => {
 
 const resetPassword = async (req, res) => {
 	const { email, oldPassword, newPassword } = req.body;
-
+	console.log(email, oldPassword, newPassword);
 	if (!email) {
 		throw new BadRequestError("Please provide an email");
 	}
@@ -66,8 +122,8 @@ const resetPassword = async (req, res) => {
 		throw new BadRequestError("Please provide the new password");
 	}
 
-	let reqUserID = req.user.userID;
-	let user = await User.findById(reqUserID);
+	let user = await User.findOne({ email });
+
 	if (user.email !== email) {
 		throw new BadRequestError("Provide the registered email");
 	}
@@ -77,11 +133,24 @@ const resetPassword = async (req, res) => {
 	}
 	user.password = newPassword;
 	await user.save();
-	res.status(StatusCodes.OK).json({ msg: "Password updated" });
+
+	const tokenUser = createTokenUser(user);
+	generateCookiesToken({ res, user: tokenUser });
+	res.status(StatusCodes.OK).json({ status: "Password updated", tokenUser });
 };
 
-const isLoggedIn = (req, res) => {
-	res.status(StatusCodes.OK).json({ user: req.user });
+const isLoggedIn = async (req, res) => {
+	const { user } = req;
+
+	let dbUser = user;
+	if (user) {
+		dbUser = await User.findById(user.userID).populate("blogs");
+		if (!dbUser) {
+			throw new BadRequestError("No user found");
+		}
+	}
+
+	res.status(StatusCodes.OK).json({ user: dbUser });
 };
 
-export { register, login, logout, resetPassword, isLoggedIn };
+export { register, login, logout, resetPassword, isLoggedIn, verifyEmail };

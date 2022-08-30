@@ -6,16 +6,16 @@ import { createTokenUser, generateCookiesToken } from "../utils/index.js";
 const getUser = async (req, res) => {
 	const { id } = req.params;
 
-	const user = await User.findById(id).select("-password");
+	const user = await User.findById(id).select("-password").populate("blogs");
 	if (!user) {
 		throw new BadRequestError("No user found");
 	}
-	res.status(StatusCodes.OK).json(user);
+	res.status(StatusCodes.OK).json({ status: "success", user });
 };
 
 const editUser = async (req, res) => {
 	const { id } = req.params;
-	const { name, email } = req.body;
+	const { name, email, description } = req.body;
 
 	if (!name) {
 		throw new BadRequestError("Please provide a name");
@@ -23,12 +23,14 @@ const editUser = async (req, res) => {
 	if (!email) {
 		throw new BadRequestError("Please provide an email");
 	}
-
-	const user = await User.findByIdAndUpdate(
-		id,
-		{ name, email },
-		{ new: true, runValidators: true }
-	);
+	let updatedUserData = { name, email };
+	if (description) {
+		updatedUserData.description = description;
+	}
+	const user = await User.findByIdAndUpdate(id, updatedUserData, {
+		new: true,
+		runValidators: true,
+	});
 	if (!user) {
 		throw new BadRequestError("No user found");
 	}
@@ -36,7 +38,7 @@ const editUser = async (req, res) => {
 
 	const tokenUser = createTokenUser(user);
 	generateCookiesToken({ res, payload: tokenUser });
-	res.status(StatusCodes.OK).json({ user: tokenUser });
+	res.status(StatusCodes.OK).json({ status: "Updated User", user: tokenUser });
 };
 
 // Will delete all the blogs of that user also, all the details of that user
@@ -53,7 +55,8 @@ const deleteUser = async (req, res) => {
 		secure: process.env.NODE_ENV === "production",
 		signed: true,
 	});
-	res.status(StatusCodes.GONE).json({ msg: "Account Deleted" });
+	req.user = null;
+	res.status(StatusCodes.GONE).json({ status: "Account Deleted" });
 };
 
 export { getUser, editUser, deleteUser };
