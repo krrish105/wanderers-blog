@@ -4,32 +4,28 @@ import axios from 'axios';
 import InputComponent from '../components/InputComponent';
 import { useGlobalContext } from '../utils/contextHook';
 import useLocalState from '../utils/localState';
+import Alert from '../components/Alert';
+import Modal from '../components/Modal';
 
 const EditUserPage = () => {
-  const { isLoading, user, saveUser } = useGlobalContext();
+  const { user, saveUser } = useGlobalContext();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    description: '',
+    name: user.name,
+    email: user.email,
+    description: user.description,
   });
   const { alert, showAlert, loading, setLoading, hideAlert } = useLocalState();
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    if (!isLoading) {
-      if (!user) {
-        window.location = '/login';
-      } else {
-        setFormData({
-          name: user.name,
-          email: user.email,
-          description: user.description,
-        });
-        const textareaElement = document.getElementById('description');
-        textareaElement.style.height = 'auto';
-        textareaElement.style.height = textareaElement.scrollHeight + 'px';
-      }
-    }
-  }, [isLoading, formData.description]);
+    const textareaElement = document.getElementById('description');
+    textareaElement.style.height = 'auto';
+    textareaElement.style.height = textareaElement.scrollHeight + 'px';
+  }, [formData.description]);
+
+  useEffect(() => {
+    document.title = "Edit Profile | Wanderer's Blog";
+  }, []);
 
   const inputHandler = (e) => {
     if (e.target.type === 'textarea') {
@@ -54,33 +50,58 @@ const EditUserPage = () => {
         updatedUser
       );
       if (data && data.status === 'Updated User') {
-        setFormData({ name: '', email: '', password: '' });
         showAlert({
-          text: `Updated ${data.user.username}'s profile. Redirecting to HomePage...`,
+          text: `Updated ${data.user.name}'s profile. Redirecting to HomePage...`,
           type: 'success',
         });
         setLoading(false);
         saveUser(data.user);
-        window.location = '/';
+        setInterval(() => {
+          window.location = '/login';
+        }, 2000);
       }
     } catch (error) {
-      showAlert({
-        text: `${error.response.data.msg}`,
-        type: 'danger',
-      });
+      const { message } = error.response.data;
+      showAlert({ text: message || 'there was an error', type: 'danger' });
     }
   };
 
+  const resetHandler = () => {
+    setShowModal(false);
+    setFormData({
+      name: user.name,
+      email: user.email,
+      description: user.description,
+    });
+  };
+
+  const closeHandler = () => {
+    setShowModal(false);
+  };
+
   return (
-    <main className="container mx-auto w-full my-16 px-4 md:px-0">
-      {isLoading ? (
-        <div>'Loading....'</div>
-      ) : (
+    <>
+      {alert.show && (
+        <Alert
+          type={alert.type}
+          display={alert.show}
+          text={alert.text}
+          hideAlert={hideAlert}
+        />
+      )}
+      <Modal
+        show={showModal}
+        close={closeHandler}
+        title="Delete Blog"
+        text={`Are you sure you want to reset the profile?`}
+        confirm={resetHandler}
+      />
+      <main className="container mx-auto w-full my-16 px-4 md:px-0">
         <>
           <form
             method="patch"
             onSubmit={submitHandler}
-            className="edit-user-container"
+            className={`edit-user-container ${loading}`}
           >
             <div className="flex-col-direction gap-4 mr-4">
               <img src={defaultPic} alt="" className="w-fit mx-auto" />
@@ -115,16 +136,22 @@ const EditUserPage = () => {
                 rows={10}
               />
               <div className="user-info-actions gap-5 mt-4">
-                <button type="submit" className="w-full">
+                <button type="submit" className="w-full" value="Submit">
                   Save
                 </button>
-                <button className="w-full">Cancel</button>
+                <button
+                  className="w-full"
+                  type="button"
+                  onClick={() => setShowModal(true)}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </form>
         </>
-      )}
-    </main>
+      </main>
+    </>
   );
 };
 

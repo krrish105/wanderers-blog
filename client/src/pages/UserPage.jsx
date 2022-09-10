@@ -8,15 +8,14 @@ import { useParams } from 'react-router-dom';
 import UserTabs from '../components/UserTabs';
 import UserBlogsTab from '../components/UserBlogsTab';
 import Modal from '../components/Modal';
+import Alert from '../components/Alert';
 
 const UserPage = () => {
-  const { user, isLoading } = useGlobalContext();
-  const { id } = useParams();
-  const [isMainUser, setIsMainUser] = useState(false);
+  const { user } = useGlobalContext();
+  const { id, section } = useParams();
+  const [isMainUser, setIsMainUser] = useState(user._id === id);
   const { alert, showAlert, loading, setLoading, hideAlert } = useLocalState();
   const [userData, setuserData] = useState({});
-  const [tabName, setTabName] = useState('user-info');
-  const [response, setResponse] = useState('');
   const [deleteUser, setDeleteUser] = useState(false);
 
   const getUser = async () => {
@@ -27,29 +26,25 @@ const UserPage = () => {
       setuserData(data.user);
       hideAlert();
     } catch (error) {
-      console.log(error);
+      const { message } = error.response.data;
+      showAlert({ text: message || 'there was an error', type: 'danger' });
     }
     setLoading(false);
   };
 
-  const tabHandler = (e) => {
-    setTabName(e.target.value);
-    return;
-  };
-
-  const confirmHandler = async (e) => {
-    setResponse(e.target.value);
+  const confirmHandler = async () => {
     try {
-      if (response === 'CONFIRM') {
-        hideAlert();
-        setLoading(true);
-        await axios.delete('/api/v1/user/' + userData._id);
+      hideAlert();
+      setLoading(true);
+      const { data } = await axios.delete('/api/v1/user/' + userData._id);
+      if (data?.status === 'Account Deleted') {
         setDeleteUser(false);
         setLoading(false);
         window.location = '/';
       }
     } catch (error) {
-      showAlert({ text: error.response.data.msg });
+      const { message } = error.response.data;
+      showAlert({ text: message || 'there was an error', type: 'danger' });
       setLoading(false);
     }
   };
@@ -57,38 +52,50 @@ const UserPage = () => {
   const deleteUserHandler = async () => {
     setDeleteUser(true);
   };
+  const closeHandler = () => {
+    setDeleteUser(false);
+  };
 
   useEffect(() => {
-    if (!isLoading) {
-      if (!user) {
-        window.location = '/login';
-      } else {
-        if (user._id === id) {
-          setIsMainUser(true);
-        }
-        if (isMainUser) {
-          setuserData(user);
-        } else {
-          getUser();
-        }
-      }
+    if (user._id === id) {
+      setIsMainUser(true);
     }
-  }, [user, id]);
+    if (isMainUser) {
+      setLoading(false);
+      setuserData(user);
+    } else {
+      getUser();
+    }
+  }, [id]);
 
-  if (isLoading || loading) {
+  useEffect(() => {
+    if (userData && userData?.name) {
+      document.title = `${userData.name} || Wanderer's Blog`;
+    }
+  }, [userData]);
+
+  if (loading) {
     return <div>Loading...</div>;
   }
 
   if (userData) {
     return (
       <>
+        {alert.show && (
+          <Alert
+            type={alert.type}
+            display={alert.show}
+            text={alert.text}
+            hideAlert={hideAlert}
+          />
+        )}
         <main className="container flex justify-start my-20 gap-14 flex-col md:flex-row px-4 md:px-0">
           <UserTabs
             imgUrl={defaultPic}
             isMainUser={isMainUser}
-            tabHandler={tabHandler}
+            user={userData._id}
           />
-          {tabName === 'user-info' ? (
+          {section === 'user-info' ? (
             <UserInfo
               id={id}
               userdata={userData}
@@ -101,10 +108,9 @@ const UserPage = () => {
         </main>
         <Modal
           show={deleteUser}
-          close={setDeleteUser}
+          close={closeHandler}
           text="Are you confirm that you want to delete your account?"
           title=""
-          setResponse={setResponse}
           confirm={confirmHandler}
         />
       </>

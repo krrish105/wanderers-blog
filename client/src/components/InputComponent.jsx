@@ -10,6 +10,7 @@ const InputComponent = ({
   isRequired,
   placeholder,
   rows,
+  autoComplete,
 }) => {
   return (
     <div className="flex-col-direction gap-2">
@@ -39,6 +40,7 @@ const InputComponent = ({
           maxLength={maxLength ? maxLength : 100}
           placeholder={placeholder}
           className="text-black py-1 text-lg px-3"
+          autoComplete={autoComplete ? 'on' : 'off'}
         />
       )}
     </div>

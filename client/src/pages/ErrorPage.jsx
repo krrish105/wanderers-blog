@@ -1,6 +1,11 @@
 import errorGif from '../assets/error.gif';
+import { useEffect } from 'react';
 
 const ErrorPage = ({ error }) => {
+  useEffect(() => {
+    document.title = 'Error';
+  }, []);
+
   return (
     <main className="flex-center-content min-h-screen flex-col">
       <div className="error-container">

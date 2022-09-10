@@ -1,11 +1,6 @@
 import { useEffect } from 'react';
 
-const Modal = ({ show = false, close, title, text, setResponse, confirm }) => {
-  const cancelHandler = (e) => {
-    setResponse(e.value);
-    close(false);
-  };
-
+const Modal = ({ show = false, close, title, text, confirm }) => {
   useEffect(() => {
     if (show) {
       document.body.style.overflow = 'hidden';
@@ -28,22 +23,16 @@ const Modal = ({ show = false, close, title, text, setResponse, confirm }) => {
       >
         <div className="flex-justify-between">
           <h2>{title}</h2>
-          <button onClick={() => close(false)}>X</button>
+          <button onClick={() => close()} className="border-0">
+            X
+          </button>
         </div>
         <div className="mt-5 text-xl">{text}</div>
         <div className="flex-justify-between mt-7">
-          <button
-            value="CONFIRM"
-            onClick={confirm}
-            className="border px-6 py-1"
-          >
+          <button value="CONFIRM" onClick={() => confirm()} className="px-6">
             Confirm
           </button>
-          <button
-            value="CANCEL"
-            onClick={cancelHandler}
-            className="border px-6 py-1"
-          >
+          <button value="CANCEL" onClick={() => close()} className="px-6">
             Cancel
           </button>
         </div>

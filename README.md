@@ -4,9 +4,9 @@
 
    <!-- - Register (Add email verification also) (DONE) -->
 
-   - Login (Add email verification also through OTP later)
-   <!-- - Logout (DONE) -->
-   - Reset Password (Send the reset password through a link, other than that don't allow anyone to go to that link)
+   - Login (Add two factor authentication also through OTP)
+     <!-- - Logout (DONE) -->
+     <!-- - Reset Password (Send the reset password through a link, other than that don't allow anyone to go to that link) -->
 
 <!-- 2. Travel Logs (DONE) -->
 <!-- 3. Users (DONE) -->
@@ -22,8 +22,8 @@
 <!-- 2. Write a log (DONE) -->
 <!-- 3. Edit their own profile (DONE) -->
 <!-- 4. Delete their own profile (Show a confirmation popup,) (DONE) -->
-
-5. Delete their log (Show a confirmation popup)
+<!--
+5. Delete their log (Show a confirmation popup) -->
 <!-- 6. Logout (DONE) -->
 
 <!-- Extra pages -->
@@ -33,20 +33,16 @@
 <!-- Additional Features to add in later versions -->
 
 1. Like a log, comment on a log
-2. Chat functionality between users
-3. Trending logs
-4. Most liked users
-5. Allow user to add a personal image
-6. Add a draft feature for blog, like if while writing a blog the user wants to save it to complete it later.
+2. Trending logs
+3. Most liked users
+4. Allow user to add a personal image
+5. Add a draft feature for blog, like if while writing a blog the user wants to save it to complete it later.
+6. Add a verification for the location that user entered in the blog
 
 <!-- Packages -->
 
-4. express-rate-limit
-5. helmet
-6. http-status-codes
-7. joi
-8. rate-limiter
-9. xss-clean
-10. cloudinary
-11. express-fileupload
-12. express-mongo-sanitize
+1. express-rate-limit
+2. joi
+3. rate-limiter
+4. cloudinary
+5. express-fileupload

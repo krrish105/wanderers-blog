@@ -4,6 +4,7 @@ import RegisterFlowLayout from '../components/RegisterFlowLayout';
 import axios from 'axios';
 import useLocalState from '../utils/localState';
 import { useGlobalContext } from '../utils/contextHook';
+import Alert from '../components/Alert';
 
 const Register = ({ error, setError }) => {
   const { saveUser } = useGlobalContext();
@@ -58,35 +59,50 @@ const Register = ({ error, setError }) => {
   }, []);
 
   return (
-    <RegisterFlowLayout title={Register}>
-      <form action="/auth/register" method="post" onSubmit={submitHandler}>
-        <InputComponent
-          id="name"
-          type="text"
-          label="Name:"
-          value={formData.name}
-          inputHandler={inputHandler}
-          minLength={3}
-          maxLength={50}
-          placeholder="John Doe"
+    <>
+      {alert.show && (
+        <Alert
+          type={alert.type}
+          display={alert.show}
+          text={alert.text}
+          hideAlert={hideAlert}
         />
-        <InputComponent
-          id="email"
-          type="email"
-          label="Email:"
-          value={formData.email}
-          inputHandler={inputHandler}
-        />
-        <InputComponent
-          id="password"
-          type="password"
-          label="Password:"
-          value={formData.password}
-          inputHandler={inputHandler}
-        />
-        <button type="submit">Sign Up</button>
-      </form>
-    </RegisterFlowLayout>
+      )}
+      <RegisterFlowLayout title={Register}>
+        <form
+          action="/auth/register"
+          method="post"
+          onSubmit={submitHandler}
+          className={`${loading}`}
+        >
+          <InputComponent
+            id="name"
+            type="text"
+            label="Name:"
+            value={formData.name}
+            inputHandler={inputHandler}
+            minLength={2}
+            maxLength={50}
+            placeholder="John Doe"
+          />
+          <InputComponent
+            id="email"
+            type="email"
+            label="Email:"
+            value={formData.email}
+            inputHandler={inputHandler}
+          />
+          <InputComponent
+            id="password"
+            type="password"
+            label="Password:"
+            value={formData.password}
+            inputHandler={inputHandler}
+          />
+          <button type="submit">Sign Up</button>
+        </form>
+      </RegisterFlowLayout>
+    </>
   );
 };
 

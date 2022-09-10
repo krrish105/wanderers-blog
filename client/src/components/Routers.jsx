@@ -11,6 +11,8 @@ import BlogPage from '../pages/BlogPage';
 import UserPage from '../pages/UserPage';
 import CreateBlogPage from '../pages/CreateBlogPage';
 import ResetPassword from '../pages/ResetPassword';
+import PrivateRoute from './ProtectedRoutes';
+import ForgotPassword from '../pages/ForgotPassword';
 
 const Routers = () => {
   return (
@@ -23,15 +25,44 @@ const Routers = () => {
             path="/user/verify-email"
             element={<VerifyEmail />}
           ></Route>
-          <Route exact path="/user/:id/edit" element={<EditUserPage />}></Route>
-          <Route exact path="/user/:id" element={<UserPage />}></Route>
+          <Route
+            exact
+            path="/user/:id/edit"
+            element={
+              <PrivateRoute>
+                <EditUserPage />
+              </PrivateRoute>
+            }
+          ></Route>
+          <Route
+            exact
+            path="/user/:id/:section"
+            element={
+              <PrivateRoute>
+                <UserPage />
+              </PrivateRoute>
+            }
+          ></Route>
+          <Route
+            exact
+            path="/user/forgot-password"
+            element={<ForgotPassword />}
+          ></Route>
           <Route
             exact
             path="/user/reset-password"
             element={<ResetPassword />}
           ></Route>
           <Route exact path="/blogs/:id" element={<BlogPage />}></Route>
-          <Route exact path="/create/blog" element={<CreateBlogPage />}></Route>
+          <Route
+            exact
+            path="/create/blog"
+            element={
+              <PrivateRoute>
+                <CreateBlogPage />
+              </PrivateRoute>
+            }
+          ></Route>
         </Route>
         <Route exact path="/login" element={<Login />}></Route>
         <Route exact path="/register" element={<Register />}></Route>

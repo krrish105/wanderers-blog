@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useGlobalContext } from '../utils/contextHook';
 import useLocalState from '../utils/localState';
 import { Link } from 'react-router-dom';
+import Alert from '../components/Alert';
 
 const Login = () => {
   const { isLoading, user, saveUser } = useGlobalContext();
@@ -43,8 +44,8 @@ const Login = () => {
         window.location = '/';
       }
     } catch (error) {
-      const { msg } = error.response.data;
-      showAlert({ text: msg || 'there was an error', type: 'danger' });
+      const { message } = error.response.data;
+      showAlert({ text: message || 'there was an error', type: 'danger' });
     }
   };
 
@@ -58,31 +59,48 @@ const Login = () => {
   }, [isLoading]);
 
   return (
-    <RegisterFlowLayout title={Login}>
-      <form action="/auth/login" method="POST" onSubmit={submitHandler}>
-        <InputComponent
-          id="email"
-          type="email"
-          label="Email:"
-          value={formData.email}
-          inputHandler={inputHandler}
-          placeholder="example@email.com"
-          isRequired={true}
+    <>
+      {alert.show && (
+        <Alert
+          type={alert.type}
+          display={alert.show}
+          text={alert.text}
+          hideAlert={hideAlert}
         />
-        <InputComponent
-          id="password"
-          type="password"
-          label="Password:"
-          value={formData.password}
-          inputHandler={inputHandler}
-          isRequired={true}
-        />
-        <button type="submit">Login</button>
-        <Link to="/user/reset-password" className="underline text-lg">
-          Forgot password?
-        </Link>
-      </form>
-    </RegisterFlowLayout>
+      )}
+      <RegisterFlowLayout title={Login}>
+        <form
+          action="/auth/login"
+          method="POST"
+          onSubmit={submitHandler}
+          className={`${loading}`}
+        >
+          <InputComponent
+            id="email"
+            type="email"
+            label="Email:"
+            value={formData.email}
+            inputHandler={inputHandler}
+            placeholder="example@email.com"
+            isRequired={true}
+            autoComplete={true}
+          />
+          <InputComponent
+            id="password"
+            type="password"
+            label="Password:"
+            value={formData.password}
+            inputHandler={inputHandler}
+            isRequired={true}
+            minLength={8}
+          />
+          <button type="submit">Login</button>
+          <Link to="/user/forgot-password" className="underline text-lg">
+            Forgot password?
+          </Link>
+        </form>
+      </RegisterFlowLayout>
+    </>
   );
 };
 

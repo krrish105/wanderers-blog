@@ -5,6 +5,7 @@ import {
 	register,
 	login,
 	logout,
+	forgotPassword,
 	resetPassword,
 	isLoggedIn,
 	verifyEmail,
@@ -13,7 +14,8 @@ import authenticateUser from "../middleware/authentication.js";
 
 router.post("/register", register);
 router.post("/login", login);
-router.delete("/logout", logout);
+router.delete("/logout", authenticateUser, logout);
+router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 router.route("/isLoggedIn").get(authenticateUser, isLoggedIn);
 router.route("/verify-email").post(verifyEmail);

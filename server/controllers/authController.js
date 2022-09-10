@@ -1,26 +1,39 @@
+import { StatusCodes } from "http-status-codes";
+import { randomBytes } from "crypto";
 import User from "../models/userModel.js";
 import Token from "../models/tokenModel.js";
-import { StatusCodes } from "http-status-codes";
-import { BadRequestError, UnauthenticatedError } from "../errors/index.js";
+import {
+	BadRequestError,
+	NotFoundError,
+	UnauthenticatedError,
+} from "../errors/index.js";
 import {
 	attachCookiesToResponse,
 	createTokenUser,
 	sendVerificationEmail,
+	sendResetPasswordEmail,
+	createHash,
 } from "../utils/index.js";
-import { randomBytes } from "crypto";
 
 const register = async (req, res) => {
 	const { name, email, password } = req.body;
 
 	let isUser = await User.find({ email });
 	if (isUser.length > 0) {
-		// Open a modal where it's shown that the user is already registered,
-		// give them a back to login and forgot password button
-		throw new BadRequestError("Already an user.");
+		if (!isUser.isVerified) {
+			throw new BadRequestError("Already an user. But not verified");
+		} else {
+			throw new BadRequestError("Already an user.");
+		}
 	}
 
 	const verificationToken = randomBytes(40).toString("hex");
-	const user = await User.create({ name, email, password, verificationToken });
+	const user = await User.create({
+		name,
+		email,
+		password,
+		verificationToken: createHash(verificationToken),
+	});
 
 	const origin = "http://localhost:3000";
 	await sendVerificationEmail({
@@ -40,9 +53,11 @@ const verifyEmail = async (req, res) => {
 		);
 	}
 	const user = await User.findOne({ email });
+
 	if (!user) {
 		throw new UnauthenticatedError("verification failed");
 	}
+
 	if (user.verificationToken !== verificationToken) {
 		throw new UnauthenticatedError("verification failed");
 	}
@@ -68,9 +83,10 @@ const login = async (req, res) => {
 
 	const user = await User.findOne({ email });
 	if (!user) {
-		throw new UnauthenticatedError("Invalid credentials");
+		throw new NotFoundError("No user found!");
 	}
 	const isPasswordCorrect = await user.comparePassword(password);
+
 	if (!isPasswordCorrect) {
 		throw new UnauthenticatedError("Invalid credentials");
 	}
@@ -99,50 +115,97 @@ const login = async (req, res) => {
 	res.status(StatusCodes.OK).json({ status: "Logged In", tokenUser });
 };
 
-const logout = (req, res) => {
-	res.cookie("token", "logout", {
+const logout = async (req, res) => {
+	await Token.findOneAndDelete({
+		user: req.user.userID,
+	});
+
+	res.cookie("accessToken", "logout", {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		signed: true,
+		expires: new Date(Date.now()),
+	});
+
+	res.cookie("refreshToken", "logout", {
 		httpOnly: true,
 		expires: new Date(Date.now()),
 		secure: process.env.NODE_ENV === "production",
 		signed: true,
 	});
-	res.status(StatusCodes.OK).send("logout");
+	req.user = null;
+	res.status(StatusCodes.OK).json({ status: "logout" });
 };
 
-const resetPassword = async (req, res) => {
-	const { email, oldPassword, newPassword } = req.body;
-	console.log(email, oldPassword, newPassword);
+const forgotPassword = async (req, res) => {
+	const { email } = req.body;
+
 	if (!email) {
 		throw new BadRequestError("Please provide an email");
 	}
-	if (!oldPassword) {
-		throw new BadRequestError("Please provide the old password");
-	}
-	if (!newPassword) {
-		throw new BadRequestError("Please provide the new password");
+
+	const user = await User.findOne({ email });
+	if (user) {
+		const passwordToken = randomBytes(70).toString("hex");
+		const passwordTokenExpirationDate = new Date(Date.now() + 1000 * 60 * 10);
+
+		user.passwordToken = createHash(passwordToken);
+		user.passwordTokenExpirationDate = passwordTokenExpirationDate;
+		await user.save();
 	}
 
-	let user = await User.findOne({ email });
+	const origin = "http://localhost:3000";
+	await sendResetPasswordEmail({
+		name: user.name,
+		email: user.email,
+		token: user.passwordToken,
+		origin,
+	});
+	res
+		.status(StatusCodes.OK)
+		.json({ status: "Please check your email for reset password link" });
+};
+
+const resetPassword = async (req, res) => {
+	const { token, email, password } = req.body;
+
+	if (!token) {
+		throw new BadRequestError("Please provide the token");
+	}
+	if (!email) {
+		throw new BadRequestError("Please provide an email");
+	}
+	if (!password) {
+		throw new BadRequestError("Please provide the password");
+	}
+
+	const user = await User.findOne({ email });
 
 	if (user.email !== email) {
 		throw new BadRequestError("Provide the registered email");
 	}
-	let isOldPassCorrect = await user.comparePassword(oldPassword);
-	if (!isOldPassCorrect) {
-		throw new BadRequestError("Old password is not valid");
-	}
-	user.password = newPassword;
-	await user.save();
 
-	const tokenUser = createTokenUser(user);
-	generateCookiesToken({ res, user: tokenUser });
-	res.status(StatusCodes.OK).json({ status: "Password updated", tokenUser });
+	if (user) {
+		const currentDate = new Date();
+		if (
+			user.passwordToken === token &&
+			user.passwordTokenExpirationDate > currentDate
+		) {
+			user.password = password;
+			user.passwordToken = null;
+			user.passwordTokenExpirationDate = null;
+			await user.save();
+		}
+	}
+
+	res.status(StatusCodes.OK).json({ status: "Password updated" });
 };
 
 const isLoggedIn = async (req, res) => {
 	const { user } = req;
 
 	let dbUser = user;
+
 	if (user) {
 		dbUser = await User.findById(user.userID).populate("blogs");
 		if (!dbUser) {
@@ -153,4 +216,12 @@ const isLoggedIn = async (req, res) => {
 	res.status(StatusCodes.OK).json({ user: dbUser });
 };
 
-export { register, login, logout, resetPassword, isLoggedIn, verifyEmail };
+export {
+	register,
+	login,
+	logout,
+	forgotPassword,
+	resetPassword,
+	isLoggedIn,
+	verifyEmail,
+};

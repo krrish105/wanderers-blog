@@ -1,11 +1,13 @@
+import { useEffect } from 'react';
 import BlogsPart from '../components/BlogsPart';
 
 const HomePage = () => {
+  useEffect(() => {
+    document.title = "Wanderer's Blog";
+  }, []);
+
   return (
-    <div className="w-full">
-      {/* <header className="h-[90vh] relative">
-        <div className="absolute-fill hero-bg-overlay"></div>
-      </header> */}
+    <div className="w-full h-full mb-[4.5rem]">
       <BlogsPart />
     </div>
   );

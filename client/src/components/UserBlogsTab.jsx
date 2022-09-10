@@ -16,7 +16,7 @@ const UserBlogsTab = ({ blogs, isPersonalPage }) => {
         {blogs.length > 0 ? (
           <div className="flex flex-wrap gap-5 justify-center md:justify-start">
             {blogs.map((el, i) => {
-              return <BlogCard key={i} blog={el} />;
+              return <BlogCard key={i} blog={el} isMainUser={isPersonalPage} />;
             })}
           </div>
         ) : (
