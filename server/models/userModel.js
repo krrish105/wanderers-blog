@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
-const { Schema, model } = mongoose;
 import validator from "validator";
-const { isEmail } = validator;
 import bcryptjs from "bcryptjs";
+import Blog from "../models/blogModel.js";
+
+const { Schema, model } = mongoose;
+const { isEmail } = validator;
 const { genSalt, hash, compare } = bcryptjs;
 
 const UserSchema = new Schema(
@@ -10,7 +12,7 @@ const UserSchema = new Schema(
 		name: {
 			type: String,
 			required: [true, "Please provide a name"],
-			minlength: 3,
+			minlength: 2,
 			maxlength: 50,
 			trim: true,
 		},
@@ -37,12 +39,22 @@ const UserSchema = new Schema(
 		avatar: {
 			type: String,
 		},
+		numOfBlogs: {
+			type: Number,
+			default: 0,
+		},
 		verificationToken: String,
 		isVerified: {
 			type: Boolean,
 			default: false,
 		},
 		verified: Date,
+		passwordToken: {
+			type: String,
+		},
+		passwordTokenExpirationDate: {
+			type: Date,
+		},
 	},
 	{ timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
@@ -55,11 +67,15 @@ UserSchema.virtual("blogs", {
 });
 
 UserSchema.pre("save", async function () {
-	// This below method will return the modified properties in the document
 	if (this.isModified("password")) {
 		const salt = await genSalt(10);
 		this.password = await hash(this.password, salt);
 	}
+});
+
+UserSchema.pre("remove", async function (next) {
+	await this.$model("Blog").deleteMany({ author: this._id });
+	next();
 });
 
 UserSchema.methods.comparePassword = async function (candidatePassword) {
@@ -68,6 +84,3 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
 };
 
 export default model("User", UserSchema);
-
-// July month: 20000 - 6000 - 224 - 349
-// June month: 4304-2000

@@ -32,8 +32,10 @@ const UserOptions = () => {
         <i className="bi bi-person-square text-white text-2xl"></i>
       </div>
       <div className="user-menu hidden peer-hover:flex hover:flex">
-        <Link to={`/user/${user._id}`}>View Profile</Link>
-        <button onClick={logoutUser}>Logout</button>
+        <Link to={`/user/${user._id}/user-info`}>View Profile</Link>
+        <button onClick={logoutUser} className="border-0">
+          Logout
+        </button>
       </div>
     </>
   );

@@ -6,9 +6,8 @@ const sendEmail = async ({ to, subject, html }) => {
 
 	const transporter = nodemailer.createTransport(nodemailerConfig);
 
-	// send mail with defined transport object
 	return transporter.sendMail({
-		from: '"Fred Foo 👻" <foo@example.com>', // sender address
+		from: '"Fred Foo 👻" <foo@example.com>',
 		to,
 		subject,
 		html,

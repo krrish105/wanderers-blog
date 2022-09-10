@@ -1,20 +1,16 @@
 import sendEmail from "./sendEmail.js";
 
-const sendVerificationEmail = async ({
-	name,
-	email,
-	verificationToken,
-	origin,
-}) => {
-	// const message =
-	// 	"<p>PLease confirm your email by clicking on the following link : </p>";
-	// return sendEmail({
-	// 	to: email,
-	// 	subject: "Email Confirmation",
-	// 	html: `<h4>Hello, ${name}</h4>
-	//     ${message}
-	//     `,
-	// });
+const sendResetPasswordEmail = ({ name, email, token, origin }) => {
+	const resetURL = `${origin}/user/reset-password?token=${token}&email=${email}`;
+	const message = `<p>PLease reset your password by clicking on the following link : 
+	<a href="${resetURL}" target="_blank">Reset Password</a></p>`;
+
+	return sendEmail({
+		to: email,
+		subject: "Reset Password",
+		html: `Hello, ${name}
+		${message}`,
+	});
 };
 
-export default sendVerificationEmail;
+export default sendResetPasswordEmail;

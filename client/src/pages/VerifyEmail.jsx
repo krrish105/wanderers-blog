@@ -34,6 +34,10 @@ const VerifyEmail = () => {
     }
   }, [isLoading]);
 
+  useEffect(() => {
+    document.title = `Verify Email`;
+  }, []);
+
   if (loading) {
     return <div>Loading....</div>;
   }

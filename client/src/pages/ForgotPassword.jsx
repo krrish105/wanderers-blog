@@ -1,24 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import InputComponent from '../components/InputComponent';
 import useLocalState from '../utils/localState';
+import { useGlobalContext } from '../utils/contextHook';
 import axios from 'axios';
 import Alert from '../components/Alert';
-import { useLocation } from 'react-router-dom';
 
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
-};
-
-const ResetPassword = () => {
-  const query = useQuery();
+const ForgotPassword = () => {
+  const { isLoading, user, saveUser } = useGlobalContext();
   const { alert, showAlert, loading, setLoading, hideAlert } = useLocalState();
   const [formData, setFormData] = useState({
-    password: '',
+    email: '',
   });
-
-  useEffect(() => {
-    document.title = "Reset Password | Wanderer's Blog";
-  }, []);
 
   const inputHandler = (e) => {
     setFormData((prev) => ({
@@ -31,31 +23,40 @@ const ResetPassword = () => {
     e.preventDefault();
     hideAlert();
     setLoading(true);
-    const { password } = formData;
-    const resetUser = {
-      token: query.get('token'),
-      email: query.get('email'),
-      password,
-    };
+    const { email } = formData;
+    const resetUser = { email };
 
     try {
-      const { data } = await axios.post('/auth/reset-password', resetUser);
-      if (data && data.status === 'Password updated') {
-        setFormData({ password: '' });
+      const { data } = await axios.post('/auth/forgot-password', resetUser);
+      if (data) {
+        setFormData({ email: '' });
         setLoading(false);
         showAlert({
-          text: `Password updated. Redirecting to Login Page...`,
+          text: data.status,
           type: 'success',
         });
-        setInterval(() => {
-          window.location = '/login';
-        }, 2000);
+        saveUser(data.tokenUser);
       }
     } catch (error) {
       const { message } = error.response.data;
       showAlert({ text: message || 'there was an error', type: 'danger' });
     }
   };
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (user) {
+        setFormData((prev) => ({
+          ...prev,
+          email: user.email,
+        }));
+      }
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    document.title = "Forgot Password | Wanderer's Blog";
+  }, []);
 
   return (
     <>
@@ -68,7 +69,7 @@ const ResetPassword = () => {
         />
       )}
       <div className="container mx-auto w-fit absolute-center">
-        <h2 className="text-4xl mb-7">Reset password</h2>
+        <h2 className="text-4xl mb-7">Forgot password</h2>
         <form
           action=""
           method="post"
@@ -76,11 +77,11 @@ const ResetPassword = () => {
           className={`flex-col-direction forgot-password-form ${loading}`}
         >
           <InputComponent
-            id="password"
+            id="email"
             isRequired={true}
-            type="password"
-            label="Password : "
-            value={formData.password}
+            type="email"
+            label="Email : "
+            value={formData.email}
             inputHandler={inputHandler}
           />
           <button type="submit" className="text-xl mt-6">
@@ -92,4 +93,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default ForgotPassword;

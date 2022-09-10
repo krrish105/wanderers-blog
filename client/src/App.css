@@ -12,11 +12,12 @@ body {
   scroll-behavior: smooth;
   color: white;
   position: relative;
+  min-height: 100vh;
 }
 
 body,
 nav {
-  background-color: rgb(36, 35, 35);
+  background-color: #225157;
 }
 
 /* Mixins */
@@ -58,16 +59,6 @@ nav {
   font-size: 1.25rem;
   line-height: 1.75rem;
   margin-top: 1.5rem;
-}
-
-header {
-  background-image: url('./assets/hero-image.jpg');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-attachment: fixed;
-}
-.hero-bg-overlay {
-  background-color: rgba(5, 5, 5, 0.1);
 }
 
 .login-page-bg {
@@ -112,20 +103,14 @@ header {
   display: grid;
   align-items: center;
   place-content: center;
-  max-width: 64rem;
+  /* max-width: 64rem; */
+  height: 100%;
   margin: 0 auto;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 .login-register-container {
-  height: 500px;
-}
-@media (min-width: 768px) {
-  .login-register-container {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: auto;
-    height: 100%;
-  }
+  /* height: 500px; */
 }
 .login-register-container > div:first-of-type {
   --tw-bg-opacity: 1;
@@ -225,24 +210,78 @@ header {
   gap: 2rem;
 }
 
-@media (min-width: 768px) {
-  .edit-user-container {
-    grid-template-columns: 30% 70%;
-    gap: 0;
-  }
-}
 .modal-container {
   width: fit-content;
   height: fit-content;
-  position: absolute;
+  position: fixed;
   float: left;
   left: 50%;
-  top: 105%;
-  transform: translate(-44%, 0%);
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .homepage-blog-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, 325px);
   place-content: center;
+}
+
+.alert {
+  border: 1px solid;
+  border-left: 4px solid;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 12px;
+  position: absolute;
+  left: 48px;
+  bottom: 48px;
+  width: fit-content;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.8;
+  max-width: 400px;
+  gap: 16px;
+}
+.alert img {
+  margin-top: 6px;
+}
+.alert button {
+  font-size: 24px;
+  line-height: 1;
+}
+.alert-danger {
+  background-color: rgb(250, 196, 196);
+  color: #bd2424;
+}
+.alert-success {
+  background-color: rgb(209, 240, 205);
+  color: #169242;
+}
+.alert-info {
+  background-color: rgb(213, 233, 249);
+  color: #0d9aa7;
+}
+.forgot-password-form {
+  gap: 1.25rem;
+  width: 60vw;
+  max-width: 36rem;
+}
+
+button {
+  border: 1px solid;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .login-register-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+    height: 100%;
+  }
+  .edit-user-container {
+    grid-template-columns: 30% 70%;
+    gap: 0;
+  }
 }

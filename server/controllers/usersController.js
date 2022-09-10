@@ -1,7 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { BadRequestError } from "../errors/index.js";
+import { BadRequestError, NotFoundError } from "../errors/index.js";
 import User from "../models/userModel.js";
-import { createTokenUser, generateCookiesToken } from "../utils/index.js";
 
 const getUser = async (req, res) => {
 	const { id } = req.params;
@@ -36,19 +35,19 @@ const editUser = async (req, res) => {
 	}
 	await user.save();
 
-	const tokenUser = createTokenUser(user);
-	generateCookiesToken({ res, payload: tokenUser });
-	res.status(StatusCodes.OK).json({ status: "Updated User", user: tokenUser });
+	res.status(StatusCodes.OK).json({ status: "Updated User", user: user });
 };
 
-// Will delete all the blogs of that user also, all the details of that user
 const deleteUser = async (req, res) => {
 	const { id } = req.params;
 
-	const user = await User.findByIdAndDelete(id);
+	const user = await User.findById(id);
 	if (!user) {
-		throw new BadRequestError("No user found");
+		throw new NotFoundError("No user found");
 	}
+
+	await user.remove();
+
 	res.cookie("token", "deleted", {
 		httpOnly: true,
 		expires: new Date(Date.now()),
@@ -56,7 +55,7 @@ const deleteUser = async (req, res) => {
 		signed: true,
 	});
 	req.user = null;
-	res.status(StatusCodes.GONE).json({ status: "Account Deleted" });
+	res.status(StatusCodes.OK).json({ status: "Account Deleted" });
 };
 
 export { getUser, editUser, deleteUser };

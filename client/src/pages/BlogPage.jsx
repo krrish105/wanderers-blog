@@ -26,6 +26,12 @@ const BlogPage = () => {
     getBlog();
   }, []);
 
+  useEffect(() => {
+    if (blog.length > 0) {
+      if (blog[0].title) document.title = `${blog[0].title} | Wanderer's Blog`;
+    }
+  }, [blog]);
+
   if (loading) {
     return (
       <>

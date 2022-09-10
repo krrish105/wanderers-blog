@@ -26,7 +26,7 @@ const authenticateUser = async (req, res, next) => {
 			user: payload.user,
 			refreshToken: existingToken.refreshToken,
 		});
-		next();
+		return next();
 	} catch (error) {
 		throw new UnauthenticatedError("Unauthenticated user");
 	}

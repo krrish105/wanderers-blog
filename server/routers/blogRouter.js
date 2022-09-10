@@ -12,5 +12,4 @@ router.route("/").get(getAllBlogs);
 router.route("/create").post(authenticateUser, createBlog);
 router.route("/:id").get(getBlog).delete(authenticateUser, deleteBlog);
 
-// except getALlBlogs and getBlog, all other methods require authentication
 export default router;
