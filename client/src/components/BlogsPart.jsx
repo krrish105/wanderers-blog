@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import useLocalState from '../utils/localState';
-import BlogCard from '../components/BlogCard';
-import Alert from '../components/Alert';
+import BlogCard from './BlogCard';
+import Alert from './Alert';
 import InputComponent from './InputComponent';
+import Spinner from './Spinner';
 
 const BlogsPart = () => {
   const [blogs, setBlogs] = useState([]);
@@ -33,7 +34,7 @@ const BlogsPart = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner display={true} />;
   }
   return (
     <>

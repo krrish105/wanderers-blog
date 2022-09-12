@@ -6,6 +6,7 @@ import { useGlobalContext } from '../utils/contextHook';
 import useLocalState from '../utils/localState';
 import Alert from '../components/Alert';
 import Modal from '../components/Modal';
+import Spinner from '../components/Spinner';
 
 const EditUserPage = () => {
   const { user, saveUser } = useGlobalContext();
@@ -57,12 +58,13 @@ const EditUserPage = () => {
         setLoading(false);
         saveUser(data.user);
         setInterval(() => {
-          window.location = '/login';
+          window.location = `/user/${data.user._id}/user-info`;
         }, 2000);
       }
     } catch (error) {
       const { message } = error.response.data;
       showAlert({ text: message || 'there was an error', type: 'danger' });
+      setLoading(false);
     }
   };
 
@@ -96,12 +98,13 @@ const EditUserPage = () => {
         text={`Are you sure you want to reset the profile?`}
         confirm={resetHandler}
       />
+      {loading && <Spinner display={true} />}
       <main className="container mx-auto w-full my-16 px-4 md:px-0">
         <>
           <form
             method="patch"
             onSubmit={submitHandler}
-            className={`edit-user-container ${loading}`}
+            className={`edit-user-container ${loading} loading`}
           >
             <div className="flex-col-direction gap-4 mr-4">
               <img src={defaultPic} alt="" className="w-fit mx-auto" />
@@ -137,7 +140,8 @@ const EditUserPage = () => {
               />
               <div className="user-info-actions gap-5 mt-4">
                 <button type="submit" className="w-full" value="Submit">
-                  Save
+
+                  {loading ? 'Submitting' : 'Save'}
                 </button>
                 <button
                   className="w-full"

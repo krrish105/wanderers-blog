@@ -70,7 +70,7 @@ const UserPage = () => {
 
   useEffect(() => {
     if (userData && userData?.name) {
-      document.title = `${userData.name} || Wanderer's Blog`;
+      document.title = `${userData.name} | Wanderer's Blog`;
     }
   }, [userData]);
 

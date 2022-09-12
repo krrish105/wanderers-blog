@@ -41,7 +41,7 @@ const Alert = ({ type, display, text, hideAlert }) => {
   useEffect(() => {
     setTimeout(() => {
       hideAlert();
-    }, 3000);
+    }, 5000);
   });
 
   return (

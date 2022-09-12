@@ -4,6 +4,7 @@ import useLocalState from '../utils/localState';
 import { useGlobalContext } from '../utils/contextHook';
 import axios from 'axios';
 import Alert from '../components/Alert';
+import Spinner from '../components/Spinner';
 
 const ForgotPassword = () => {
   const { isLoading, user, saveUser } = useGlobalContext();
@@ -68,6 +69,7 @@ const ForgotPassword = () => {
           hideAlert={hideAlert}
         />
       )}
+      {loading && <Spinner display={true} />}
       <div className="container mx-auto w-fit absolute-center">
         <h2 className="text-4xl mb-7">Forgot password</h2>
         <form
@@ -85,7 +87,7 @@ const ForgotPassword = () => {
             inputHandler={inputHandler}
           />
           <button type="submit" className="text-xl mt-6">
-            Submit
+            {loading ? 'Submitting' : 'Submit'}
           </button>
         </form>
       </div>

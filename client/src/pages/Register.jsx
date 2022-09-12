@@ -5,8 +5,9 @@ import axios from 'axios';
 import useLocalState from '../utils/localState';
 import { useGlobalContext } from '../utils/contextHook';
 import Alert from '../components/Alert';
+import Spinner from '../components/Spinner';
 
-const Register = ({ error, setError }) => {
+const Register = () => {
   const { saveUser } = useGlobalContext();
   const [formData, setFormData] = useState({
     name: '',
@@ -68,13 +69,9 @@ const Register = ({ error, setError }) => {
           hideAlert={hideAlert}
         />
       )}
-      <RegisterFlowLayout title={Register}>
-        <form
-          action="/auth/register"
-          method="post"
-          onSubmit={submitHandler}
-          className={`${loading}`}
-        >
+      {loading && <Spinner display={true} />}
+      <RegisterFlowLayout title="Register">
+        <form action="/auth/register" method="post" onSubmit={submitHandler}>
           <InputComponent
             id="name"
             type="text"

@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
 import User from "../models/userModel.js";
+import Token from "../models/tokenModel.js";
 
 const getUser = async (req, res) => {
 	const { id } = req.params;
@@ -48,13 +49,25 @@ const deleteUser = async (req, res) => {
 
 	await user.remove();
 
-	res.cookie("token", "deleted", {
+	await Token.findOneAndDelete({
+		user: req.user.userID,
+	});
+
+	res.cookie("accessToken", "logout", {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		signed: true,
+		expires: new Date(Date.now()),
+	});
+
+	res.cookie("refreshToken", "logout", {
 		httpOnly: true,
 		expires: new Date(Date.now()),
 		secure: process.env.NODE_ENV === "production",
 		signed: true,
 	});
 	req.user = null;
+
 	res.status(StatusCodes.OK).json({ status: "Account Deleted" });
 };
 

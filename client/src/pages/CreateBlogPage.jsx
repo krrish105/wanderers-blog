@@ -3,6 +3,7 @@ import InputComponent from '../components/InputComponent';
 import axios from 'axios';
 import useLocalState from '../utils/localState';
 import Alert from '../components/Alert';
+import Spinner from '../components/Spinner';
 
 const CreateBlogPage = () => {
   const [formData, setFormData] = useState({
@@ -61,6 +62,7 @@ const CreateBlogPage = () => {
           hideAlert={hideAlert}
         />
       )}
+      {loading && <Spinner display={true} />}
       <main className="container mx-auto my-20 px-4 md:px-0">
         <div className="grid gap-6 grid-rows-2 md:grid-cols-2 md:grid-rows-none">
           <form

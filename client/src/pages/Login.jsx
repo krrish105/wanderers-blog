@@ -6,6 +6,7 @@ import { useGlobalContext } from '../utils/contextHook';
 import useLocalState from '../utils/localState';
 import { Link } from 'react-router-dom';
 import Alert from '../components/Alert';
+import Spinner from '../components/Spinner';
 
 const Login = () => {
   const { isLoading, user, saveUser } = useGlobalContext();
@@ -33,19 +34,29 @@ const Login = () => {
     }
     try {
       const { data } = await axios.post('/auth/login', loginUser);
-      if (data && data.status === 'Logged In') {
+      if (data) {
+        if (data.message === 'Logged In') {
+          showAlert({
+            text: `Welcome ${data.tokenUser.username}. Redirecting to HomePage...`,
+            type: 'success',
+          });
+          setTimeout(() => {
+            window.location = '/';
+          }, 4000);
+        } else {
+          showAlert({
+            text: `${data.message}`,
+            type: 'success',
+          });
+        }
         setFormData({ email: '', password: '' });
-        showAlert({
-          text: `Welcome ${data.tokenUser.username}. Redirecting to HomePage...`,
-          type: 'success',
-        });
         setLoading(false);
         saveUser(data.tokenUser);
-        window.location = '/';
       }
     } catch (error) {
       const { message } = error.response.data;
       showAlert({ text: message || 'there was an error', type: 'danger' });
+      setLoading(false);
     }
   };
 
@@ -68,7 +79,8 @@ const Login = () => {
           hideAlert={hideAlert}
         />
       )}
-      <RegisterFlowLayout title={Login}>
+      {loading && <Spinner display={true} />}
+      <RegisterFlowLayout title="Login">
         <form
           action="/auth/login"
           method="POST"
@@ -94,7 +106,7 @@ const Login = () => {
             isRequired={true}
             minLength={8}
           />
-          <button type="submit">Login</button>
+          <button type="submit">{loading ? 'Submitting' : 'Login'}</button>
           <Link to="/user/forgot-password" className="underline text-lg">
             Forgot password?
           </Link>

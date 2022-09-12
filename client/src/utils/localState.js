@@ -6,7 +6,7 @@ const useLocalState = () => {
     text: '',
     type: 'danger',
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const showAlert = ({ text, type = 'danger' }) => {

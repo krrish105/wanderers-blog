@@ -2,6 +2,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { useGlobalContext } from '../utils/contextHook';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import Spinner from '../components/Spinner';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -39,19 +40,26 @@ const VerifyEmail = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading....</div>;
+    return <Spinner display={true} />;
   }
 
   if (error) {
     return (
-      <div>There was an error, please double check your verification link.</div>
+      <div className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 text-2xl">
+        There was an error, please double check your verification link.
+      </div>
     );
   }
 
   return (
-    <div className="container mx-auto">
-      <h2>{message}</h2>
-      <Link to="/login">Please login</Link>
+    <div className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4">
+      <h2 className="text-3xl mb-4">{message}</h2>
+      <p className="text-2xl">
+        Please{' '}
+        <Link to="/login" className="text-indigo-400">
+          Login
+        </Link>
+      </p>
     </div>
   );
 };
