@@ -31,6 +31,7 @@ const register = async (req, res) => {
 		password,
 		verificationToken: createHash(verificationToken),
 		verificationTokenExpirationDate,
+
 	});
 
 	const origin = "http://localhost:3000";
@@ -63,6 +64,7 @@ const verifyEmail = async (req, res) => {
 			throw new UnauthenticatedError("verification failed");
 		}
 	}
+
 	user.isVerified = true;
 	user.verified = Date.now();
 	user.verificationToken = "";

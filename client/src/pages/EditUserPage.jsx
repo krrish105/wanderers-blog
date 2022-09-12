@@ -140,6 +140,7 @@ const EditUserPage = () => {
               />
               <div className="user-info-actions gap-5 mt-4">
                 <button type="submit" className="w-full" value="Submit">
+
                   {loading ? 'Submitting' : 'Save'}
                 </button>
                 <button

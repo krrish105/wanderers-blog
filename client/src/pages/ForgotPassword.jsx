@@ -26,6 +26,7 @@ const ForgotPassword = () => {
     setLoading(true);
     const { email } = formData;
     const resetUser = { email };
+
     try {
       const { data } = await axios.post('/auth/forgot-password', resetUser);
       if (data) {
