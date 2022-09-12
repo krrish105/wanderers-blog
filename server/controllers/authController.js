@@ -20,19 +20,17 @@ const register = async (req, res) => {
 
 	let isUser = await User.find({ email });
 	if (isUser.length > 0) {
-		if (!isUser.isVerified) {
-			throw new BadRequestError("Already an user. But not verified");
-		} else {
-			throw new BadRequestError("Already an user.");
-		}
+		throw new BadRequestError("Already an user.");
 	}
 
+	const verificationTokenExpirationDate = new Date(Date.now() + 1000 * 60 * 30);
 	const verificationToken = randomBytes(40).toString("hex");
 	const user = await User.create({
 		name,
 		email,
 		password,
 		verificationToken: createHash(verificationToken),
+		verificationTokenExpirationDate,
 	});
 
 	const origin = "http://localhost:3000";
@@ -56,15 +54,19 @@ const verifyEmail = async (req, res) => {
 
 	if (!user) {
 		throw new UnauthenticatedError("verification failed");
+	} else {
+		const currentDate = new Date();
+		if (
+			user.verificationToken !== verificationToken &&
+			user.verificationTokenExpirationDate < currentDate
+		) {
+			throw new UnauthenticatedError("verification failed");
+		}
 	}
-
-	if (user.verificationToken !== verificationToken) {
-		throw new UnauthenticatedError("verification failed");
-	}
-
 	user.isVerified = true;
 	user.verified = Date.now();
 	user.verificationToken = "";
+	user.verificationTokenExpirationDate = null;
 	await user.save();
 
 	res.status(StatusCodes.OK).json({
@@ -92,7 +94,28 @@ const login = async (req, res) => {
 	}
 
 	if (!user.isVerified) {
-		throw new UnauthenticatedError("Please verify your email");
+		const verificationTokenExpirationDate = new Date(
+			Date.now() + 1000 * 60 * 30
+		);
+		const verificationToken = randomBytes(40).toString("hex");
+		user.verificationToken = verificationToken;
+		user.verificationTokenExpirationDate = verificationTokenExpirationDate;
+		await user.save();
+
+		const origin = "http://localhost:3000";
+
+		await sendVerificationEmail({
+			name: user.name,
+			email: user.email,
+			verificationToken: user.verificationToken,
+			origin,
+		});
+
+		return res.status(StatusCodes.OK).json({
+			status: "success",
+			message:
+				"Already an user, but unverified one. We have sent a new verification link to you",
+		});
 	}
 
 	const tokenUser = createTokenUser(user);
@@ -112,7 +135,9 @@ const login = async (req, res) => {
 		await Token.create(userToken);
 	}
 	attachCookiesToResponse({ res, user: tokenUser, refreshToken });
-	res.status(StatusCodes.OK).json({ status: "Logged In", tokenUser });
+	res
+		.status(StatusCodes.OK)
+		.json({ status: "success", tokenUser, message: "Logged In" });
 };
 
 const logout = async (req, res) => {

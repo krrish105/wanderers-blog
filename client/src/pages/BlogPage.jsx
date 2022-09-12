@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import useLocalState from '../utils/localState';
 import axios from 'axios';
+import { Navigate } from 'react-router-dom';
+import Spinner from '../components/Spinner';
+import Alert from '../components/Alert';
 
 const BlogPage = () => {
   const blogID = useParams();
@@ -16,10 +19,12 @@ const BlogPage = () => {
         setBlog([data.blog]);
       }
       hideAlert();
+      setLoading(false);
     } catch (error) {
-      showAlert({ text: error.response.data.msg });
+      const { message } = error.response.data;
+      showAlert({ text: message || 'there was an error', type: 'danger' });
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -33,16 +38,33 @@ const BlogPage = () => {
   }, [blog]);
 
   if (loading) {
+    return <Spinner display={true} />;
+  } else if (!loading && blog.length === 0) {
     return (
       <>
-        <div>Loading....</div>
+        {alert.show && (
+          <Alert
+            type={alert.type}
+            display={alert.show}
+            text={alert.text}
+            hideAlert={hideAlert}
+          />
+        )}
       </>
     );
-  } else if (blog) {
+  } else if (blog.length > 0) {
     return (
       <div className="container px-4 md:px-0 mx-auto my-20">
+        {alert.show && (
+          <Alert
+            type={alert.type}
+            display={alert.show}
+            text={alert.text}
+            hideAlert={hideAlert}
+          />
+        )}
         {!alert.show && loading ? (
-          <div>Loading....</div>
+          <Spinner display={true} />
         ) : (
           <div className="blog-preview">
             <div className="flex-col-direction gap-2">

@@ -48,13 +48,10 @@ const UserSchema = new Schema(
 			type: Boolean,
 			default: false,
 		},
+		verificationTokenExpirationDate: Date,
 		verified: Date,
-		passwordToken: {
-			type: String,
-		},
-		passwordTokenExpirationDate: {
-			type: Date,
-		},
+		passwordToken: String,
+		passwordTokenExpirationDate: Date,
 	},
 	{ timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );

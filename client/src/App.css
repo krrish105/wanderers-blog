@@ -17,7 +17,7 @@ body {
 
 body,
 nav {
-  background-color: #225157;
+  background-color: #250426;
 }
 
 /* Mixins */
@@ -98,8 +98,7 @@ nav {
   margin: 2rem auto 0;
   width: fit-content;
 }
-.error-container,
-.login-register-container {
+.error-container {
   display: grid;
   align-items: center;
   place-content: center;
@@ -110,13 +109,17 @@ nav {
   grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 .login-register-container {
-  /* height: 500px; */
+  display: grid;
+  align-items: center;
+  place-content: center;
+  margin: 0 auto;
+  grid-template-columns: 1fr 1.8fr;
 }
+
 .login-register-container > div:first-of-type {
-  --tw-bg-opacity: 1;
-  background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+  background-color: #042204;
   width: 100%;
-  padding: 3rem;
+  padding: 4rem;
   border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
 }
@@ -267,19 +270,61 @@ nav {
   width: 60vw;
   max-width: 36rem;
 }
-
+.spinner-backdrop {
+  opacity: 0.5;
+  z-index: 100;
+  cursor: not-allowed;
+  background-color: black;
+}
 button {
   border: 1px solid;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
 
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  z-index: 1000;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  margin: 8px;
+  border: 6px solid rgb(124, 224, 195);
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: rgb(124, 224, 195) transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 @media (min-width: 768px) {
-  .login-register-container {
+  /* .login-register-container {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: auto;
     height: 100%;
-  }
+  } */
   .edit-user-container {
     grid-template-columns: 30% 70%;
     gap: 0;
