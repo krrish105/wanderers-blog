@@ -9,6 +9,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import mongoSanitize from "express-mongo-sanitize";
 import xss from "xss-clean";
+import rateLimit from "express-rate-limit";
 
 import notFoundError from "./middleware/notFoundError.js";
 import errorHandler from "./middleware/errorHandler.js";
@@ -22,8 +23,13 @@ import blogRouter from "./routers/blogRouter.js";
 const port = process.env.PORT || 3001;
 const app = express();
 
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000,
+	max: 100,
+});
 
 app.disable("x-powered-by");
+app.use(limiter);
 app.use(helmet());
 app.use(cors());
 app.use(morgan("dev"));

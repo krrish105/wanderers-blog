@@ -8,6 +8,7 @@ import Spinner from './Spinner';
 
 const BlogsPart = () => {
   const [blogs, setBlogs] = useState([]);
+  const [filteredBlogs, setFilteredBlogs] = useState([]);
   const { alert, showAlert, loading, setLoading, hideAlert } = useLocalState();
   const [searchText, setSearchText] = useState('');
 
@@ -18,10 +19,19 @@ const BlogsPart = () => {
       const { data } = await axios.get('/api/v1/blogs?search=' + searchText);
       if (data.status === 'success' && data.length > 0) {
         setBlogs(data.data);
+        setFilteredBlogs(data.data);
       }
       hideAlert();
     } catch (error) {
-      showAlert({ text: error.response.data.msg });
+      console.log(error);
+      const { message } = error.response.data;
+      if (message) {
+        showAlert({ text: message, type: 'danger' });
+      } else if (error.response.data) {
+        showAlert({ text: error.response.data, type: 'danger' });
+      } else {
+        showAlert({ text: 'There was an error', type: 'danger' });
+      }
     }
     setLoading(false);
   };
@@ -35,12 +45,17 @@ const BlogsPart = () => {
   const inputHandler = (e) => {
     e.preventDefault();
     setSearchText(e.target.value);
-    if (e.target.value.length > 3) {
-      const filteredBlogs = blogs.filter((el, i) => {
-        if (el.title.includes(searchText)) return el;
+    if (e.target.value.length > 2) {
+      const filteredBlogsData = blogs.filter((el, i) => {
+        if (
+          el.title.includes(searchText) ||
+          el.locationName.includes(searchText) ||
+          el.author.name.includes(searchText)
+        )
+          return el;
       });
-      if (filteredBlogs.length > 0) {
-        setBlogs(filteredBlogs);
+      if (filteredBlogsData.length > 0) {
+        setFilteredBlogs(filteredBlogsData);
       }
     }
   };
@@ -59,7 +74,7 @@ const BlogsPart = () => {
         />
       )}
       <main className="container mx-auto md:mx-auto my-9">
-        {blogs.length > 0 ? (
+        {filteredBlogs.length > 0 ? (
           <>
             {' '}
             <div className="block max-w-xs mb-8">
@@ -75,7 +90,7 @@ const BlogsPart = () => {
             <section>
               <h2 className="text-3xl mb-8">Blogs</h2>
               <div className="gap-6 mb-9 homepage-blog-container">
-                {blogs.map((el, i) => {
+                {filteredBlogs.map((el, i) => {
                   return <BlogCard key={i} blog={el} />;
                 })}
               </div>
