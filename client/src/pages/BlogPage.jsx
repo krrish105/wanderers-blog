@@ -38,7 +38,7 @@ const BlogPage = () => {
   }, [blog]);
 
   if (loading) {
-    return <Spinner display={true} />;
+    return <Spinner />;
   } else if (!loading && blog.length === 0) {
     return (
       <>
@@ -64,7 +64,7 @@ const BlogPage = () => {
           />
         )}
         {!alert.show && loading ? (
-          <Spinner display={true} />
+          <Spinner />
         ) : (
           <div className="blog-preview">
             <div className="flex-col-direction gap-2">

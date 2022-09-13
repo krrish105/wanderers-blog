@@ -62,7 +62,7 @@ const CreateBlogPage = () => {
           hideAlert={hideAlert}
         />
       )}
-      {loading && <Spinner display={true} />}
+      {loading && <Spinner />}
       <main className="container mx-auto my-20 px-4 md:px-0">
         <div className="grid gap-6 grid-rows-2 md:grid-cols-2 md:grid-rows-none">
           <form

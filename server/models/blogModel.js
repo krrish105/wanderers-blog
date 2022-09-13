@@ -36,10 +36,4 @@ const BlogSchema = new Schema(
 	{ timestamps: true }
 );
 
-BlogSchema.index({ author: 1 }, { unique: true });
-
-BlogSchema.post("remove", async function () {
-	console.log("post remove hook");
-});
-
 export default model("Blog", BlogSchema);

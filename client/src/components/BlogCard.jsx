@@ -25,7 +25,7 @@ const BlogCard = ({ blog, isMainUser }) => {
         setLoading(false);
         setInterval(() => {
           window.location.reload(true);
-        }, 2000);
+        }, 1000);
       }
     } catch (error) {
       const { message } = error.response.data;

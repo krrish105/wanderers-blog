@@ -7,7 +7,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="w-full h-full mb-[4.5rem]">
+    <div className="w-full h-full mb-[4.5rem] px-4 md:px-0">
       <BlogsPart />
     </div>
   );

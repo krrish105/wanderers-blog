@@ -8,7 +8,13 @@ import Blogs from "../models/blogModel.js";
 import { StatusCodes } from "http-status-codes";
 
 const getAllBlogs = async (req, res) => {
-	const blogs = await Blogs.find({}).populate("author").sort("title");
+	const { search } = req.query;
+	const regex = new RegExp(search, "i");
+
+	const blogs = await Blogs.find({ title: { $regex: regex } })
+		.populate("author")
+		.sort("title");
+
 	if (blogs.length < 1) {
 		return res.status(StatusCodes.OK).json({
 			status: "error",
@@ -16,6 +22,7 @@ const getAllBlogs = async (req, res) => {
 			length: 0,
 		});
 	}
+
 	res.status(StatusCodes.OK).json({
 		status: "success",
 		data: blogs,

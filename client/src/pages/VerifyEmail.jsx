@@ -40,7 +40,7 @@ const VerifyEmail = () => {
   }, []);
 
   if (loading) {
-    return <Spinner display={true} />;
+    return <Spinner />;
   }
 
   if (error) {

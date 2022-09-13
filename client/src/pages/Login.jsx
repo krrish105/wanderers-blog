@@ -79,7 +79,7 @@ const Login = () => {
           hideAlert={hideAlert}
         />
       )}
-      {loading && <Spinner display={true} />}
+      {loading && <Spinner />}
       <RegisterFlowLayout title="Login">
         <form
           action="/auth/login"
