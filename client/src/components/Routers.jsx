@@ -4,7 +4,6 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Layout from '../pages/Layout';
 import ErrorPage from '../pages/ErrorPage';
-import NotFoundPage from '../pages/NotFoundPage';
 import EditUserPage from '../pages/EditUserPage';
 import VerifyEmail from '../pages/VerifyEmail';
 import BlogPage from '../pages/BlogPage';
@@ -67,7 +66,11 @@ const Routers = () => {
         <Route exact path="/login" element={<Login />}></Route>
         <Route exact path="/register" element={<Register />}></Route>
         <Route exact path="/error" element={<ErrorPage />}></Route>
-        <Route exact path="*" element={<NotFoundPage />}></Route>
+        <Route
+          exact
+          path="*"
+          element={<ErrorPage notFoundPage={true} />}
+        ></Route>
       </Routes>
     </Router>
   );

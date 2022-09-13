@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 const Layout = () => {
   return (
-    <div className="flex-col-direction items-center h-screen">
+    <div className="flex-col-direction items-center min-h-screen">
       <Navigation />
       <Outlet />
       <footer className="py-4 w-full flex-center-content sticky top-[100vh] border-t-[1px]">

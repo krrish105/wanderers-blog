@@ -69,7 +69,7 @@ const ResetPassword = () => {
           hideAlert={hideAlert}
         />
       )}
-      {loading && <Spinner display={true} />}
+      {loading && <Spinner />}
       <div className="container mx-auto w-fit absolute-center">
         <h2 className="text-4xl mb-7">Reset password</h2>
         <form

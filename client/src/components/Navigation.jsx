@@ -33,7 +33,7 @@ const UserOptions = () => {
       </div>
       <div className="user-menu hidden peer-hover:flex hover:flex">
         <Link to={`/user/${user._id}/user-info`}>View Profile</Link>
-        <button onClick={logoutUser} className="border-0">
+        <button onClick={logoutUser} className="border-0 logout-button">
           Logout
         </button>
       </div>

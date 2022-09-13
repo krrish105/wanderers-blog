@@ -69,7 +69,7 @@ const Register = () => {
           hideAlert={hideAlert}
         />
       )}
-      {loading && <Spinner display={true} />}
+      {loading && <Spinner />}
       <RegisterFlowLayout title="Register">
         <form action="/auth/register" method="post" onSubmit={submitHandler}>
           <InputComponent

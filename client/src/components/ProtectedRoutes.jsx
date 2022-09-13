@@ -7,7 +7,7 @@ const PrivateRoute = ({ children }) => {
   const { user, isLoading } = useGlobalContext();
 
   if (isLoading) {
-    return <Spinner display={true} />;
+    return <Spinner />;
   }
   return user ? children : <Navigate to="/"></Navigate>;
 };

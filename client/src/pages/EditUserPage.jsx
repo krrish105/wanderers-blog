@@ -98,7 +98,7 @@ const EditUserPage = () => {
         text={`Are you sure you want to reset the profile?`}
         confirm={resetHandler}
       />
-      {loading && <Spinner display={true} />}
+      {loading && <Spinner />}
       <main className="container mx-auto w-full my-16 px-4 md:px-0">
         <>
           <form
@@ -140,7 +140,6 @@ const EditUserPage = () => {
               />
               <div className="user-info-actions gap-5 mt-4">
                 <button type="submit" className="w-full" value="Submit">
-
                   {loading ? 'Submitting' : 'Save'}
                 </button>
                 <button

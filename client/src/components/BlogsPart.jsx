@@ -12,9 +12,10 @@ const BlogsPart = () => {
   const [searchText, setSearchText] = useState('');
 
   const getBlogs = async () => {
+    hideAlert();
     setLoading(true);
     try {
-      const { data } = await axios.get('/api/v1/blogs');
+      const { data } = await axios.get('/api/v1/blogs?search=' + searchText);
       if (data.status === 'success' && data.length > 0) {
         setBlogs(data.data);
       }
@@ -26,15 +27,26 @@ const BlogsPart = () => {
   };
 
   useEffect(() => {
-    getBlogs();
-  }, []);
+    if (searchText === '') {
+      getBlogs();
+    }
+  }, [searchText]);
 
   const inputHandler = (e) => {
-    console.log(e);
+    e.preventDefault();
+    setSearchText(e.target.value);
+    if (e.target.value.length > 3) {
+      const filteredBlogs = blogs.filter((el, i) => {
+        if (el.title.includes(searchText)) return el;
+      });
+      if (filteredBlogs.length > 0) {
+        setBlogs(filteredBlogs);
+      }
+    }
   };
 
   if (loading) {
-    return <Spinner display={true} />;
+    return <Spinner />;
   }
   return (
     <>
@@ -46,7 +58,7 @@ const BlogsPart = () => {
           hideAlert={hideAlert}
         />
       )}
-      <main className="container mx-4 md:mx-auto my-9 mb-16 h-full">
+      <main className="container mx-auto md:mx-auto my-9">
         {blogs.length > 0 ? (
           <>
             {' '}
@@ -70,9 +82,11 @@ const BlogsPart = () => {
             </section>
           </>
         ) : (
-          <div className="border text-3xl h-[inherit] flex justify-center items-center">
-            No Blogs Found!
-          </div>
+          !searchText && (
+            <div className="border text-3xl flex justify-center items-center h-screen">
+              No Blogs Found!
+            </div>
+          )
         )}
       </main>
     </>

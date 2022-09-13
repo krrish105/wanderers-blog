@@ -1,17 +1,22 @@
 import errorGif from '../assets/error.gif';
 import { useEffect } from 'react';
+import notFound from '../assets/404-error.gif';
 
-const ErrorPage = ({ error }) => {
+const ErrorPage = ({ notFoundPage = false }) => {
   useEffect(() => {
-    document.title = 'Error';
-  }, []);
+    document.title = notFoundPage ? 'Not Found' : 'Error';
+  }, [notFoundPage]);
 
   return (
-    <main className="flex-center-content min-h-screen flex-col">
-      <div className="error-container">
-        <img src={errorGif} alt="" />
+    <main className="flex-center-content error-container-outer">
+      <div className="error-container-inner">
+        <img src={notFoundPage ? notFound : errorGif} alt="" />
         <div className="error-right-part">
-          <div>Something went wrong, Try again later</div>
+          <div>
+            {notFoundPage
+              ? 'Oops! The page you are looking for could not be found.'
+              : 'Something went wrong, Try again later'}
+          </div>
           <a href="/">Back to Home</a>
         </div>
       </div>

@@ -9,6 +9,7 @@ import UserTabs from '../components/UserTabs';
 import UserBlogsTab from '../components/UserBlogsTab';
 import Modal from '../components/Modal';
 import Alert from '../components/Alert';
+import Spinner from '../components/Spinner';
 
 const UserPage = () => {
   const { user } = useGlobalContext();
@@ -75,7 +76,7 @@ const UserPage = () => {
   }, [userData]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   if (userData) {
@@ -89,11 +90,12 @@ const UserPage = () => {
             hideAlert={hideAlert}
           />
         )}
-        <main className="container flex justify-start my-20 gap-14 flex-col md:flex-row px-4 md:px-0">
+        <main className="container flex justify-start my-20 gap-14 flex-col lg:flex-row px-4 md:px-0">
           <UserTabs
             imgUrl={defaultPic}
             isMainUser={isMainUser}
             user={userData._id}
+            activeTab={section}
           />
           {section === 'user-info' ? (
             <UserInfo
