@@ -245,7 +245,7 @@ nav {
   justify-content: center;
   align-items: flex-start;
   padding: 12px;
-  position: absolute;
+  position: fixed;
   left: 48px;
   bottom: 48px;
   width: fit-content;
