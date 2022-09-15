@@ -34,9 +34,10 @@ const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    console.log('hello');
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  }, []);
 
   return (
     <AppContext.Provider
