@@ -57,17 +57,20 @@ const BlogCard = ({ blog, isMainUser }) => {
           hideAlert={hideAlert}
         />
       )}
-      <div className="border relative">
+      <div className="relative blog-card">
         {isMainUser && (
           <button
-            className="absolute right-3 top-3 border-0 p-0"
+            className="absolute right-3 top-3 border-0 p-0 z-10"
             onClick={() => setShowModal(true)}
           >
             <img src={deleteIcon} alt="delete blog" width={24} />
           </button>
         )}
-        <img src={defaultBlog} alt="" width={350} height={400} />
-        <div className="py-4 px-6 flex-col-direction gap-1">
+        <div className="image-blog">
+          <img src={defaultBlog} alt="" width={350} height={400} />
+          <div className="img-overlay"></div>
+        </div>
+        <div className="py-4 px-6 flex-col-direction gap-1 z-10 relative blog-text">
           <Link
             to={`/blogs/${blog._id}`}
             className="text-2xl text-overflow w-fit"

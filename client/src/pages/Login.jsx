@@ -106,10 +106,10 @@ const Login = () => {
             isRequired={true}
             minLength={8}
           />
-          <button type="submit">{loading ? 'Submitting' : 'Login'}</button>
           <Link to="/user/forgot-password" className="underline text-lg">
             Forgot password?
           </Link>
+          <button type="submit">{loading ? 'Submitting' : 'Login'}</button>
         </form>
       </RegisterFlowLayout>
     </>

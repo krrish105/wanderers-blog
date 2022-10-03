@@ -39,9 +39,9 @@ const Alert = ({ type, display, text, hideAlert }) => {
   };
 
   useEffect(() => {
-    // setTimeout(() => {
-    //   hideAlert();
-    // }, 5000);
+    setTimeout(() => {
+      hideAlert();
+    }, 5000);
   });
 
   return (

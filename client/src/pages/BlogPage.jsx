@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import useLocalState from '../utils/localState';
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import Alert from '../components/Alert';
 

@@ -6,7 +6,7 @@ const Layout = () => {
     <div className="flex-col-direction items-center min-h-screen">
       <Navigation />
       <Outlet />
-      <footer className="py-4 w-full flex-center-content sticky top-[100vh] border-t-[1px]">
+      <footer className="py-4 w-full flex-center-content sticky top-[100vh]">
         <p>
           Made with ❤️ by{' '}
           <a
