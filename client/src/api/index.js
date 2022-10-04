@@ -1,13 +1,18 @@
 import axios from 'axios';
 
 const url =
-  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000/api/v1';
-const API = axios.create({ baseURL: url });
+  process.env.NODE_ENV === 'production'
+    ? 'https://wanderers-blog-api.herokuapp.com/api/v1/'
+    : 'http://localhost:3000/api/v1';
+
+const API = axios.create({
+  baseURL: 'https://wanderers-blog-api.herokuapp.com/api/v1/',
+});
 
 // Auth
-export const login = (loginUser) => axios.post('/auth/login', loginUser);
+export const login = (loginUser) => API.post('/auth/login', loginUser);
 export const register = (registerUser) =>
-  axios.post('/auth/register', registerUser);
+  API.post('/auth/register', registerUser);
 export const forgotPassword = (resetUser) =>
   API.post('/auth/forgot-password', resetUser);
 export const resetPassword = (resetUser) =>

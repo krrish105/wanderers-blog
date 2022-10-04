@@ -34,13 +34,17 @@ const attachCookiesToResponse = ({ res, user, refreshToken }) => {
 		secure: process.env.NODE_ENV === "production",
 		signed: true,
 		maxAge: new Date(Date.now() + oneDay),
+		domain: "http://localhost:3000/",
+		sameSite: "none",
 	});
 
 	res.cookie("refreshToken", refresTokenJWT, {
 		httpOnly: true,
 		expires: new Date(Date.now() + longerExp),
 		secure: process.env.NODE_ENV === "production",
+		domain: "http://localhost:3000/",
 		signed: true,
+		sameSite: "none",
 	});
 };
 
