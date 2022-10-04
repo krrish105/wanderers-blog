@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import InputComponent from '../components/InputComponent';
-import RegisterFlowLayout from '../components/RegisterFlowLayout';
-import axios from 'axios';
+import InputComponent from '../components/atoms/InputComponent';
+import RegisterFlowLayout from '../components/molecules/LoginRegisterLayout/RegisterFlowLayout';
 import { useGlobalContext } from '../utils/contextHook';
 import useLocalState from '../utils/localState';
 import { Link } from 'react-router-dom';
-import Alert from '../components/Alert';
-import Spinner from '../components/Spinner';
+import Alert from '../components/atoms/Alert';
+import Spinner from '../components/atoms/Spinner';
+import { login } from '../actions/auth';
 
 const Login = () => {
   const { isLoading, user, saveUser } = useGlobalContext();
@@ -32,32 +32,28 @@ const Login = () => {
     if (!email || !password) {
       return false;
     }
-    try {
-      const { data } = await axios.post('/auth/login', loginUser);
-      if (data) {
-        if (data.message === 'Logged In') {
-          showAlert({
-            text: `Welcome ${data.tokenUser.username}. Redirecting to HomePage...`,
-            type: 'success',
-          });
-          setTimeout(() => {
-            window.location = '/';
-          }, 4000);
-        } else {
-          showAlert({
-            text: `${data.message}`,
-            type: 'success',
-          });
-        }
-        setFormData({ email: '', password: '' });
-        setLoading(false);
-        saveUser(data.tokenUser);
+    const { status, data } = await login(loginUser);
+    if (data && status === 'success') {
+      if (data.message === 'Logged In') {
+        showAlert({
+          text: `Welcome ${data.tokenUser.username}. Redirecting to HomePage...`,
+          type: 'success',
+        });
+        setTimeout(() => {
+          window.location = '/';
+        }, 4000);
+      } else {
+        showAlert({
+          text: `${data.message}`,
+          type: 'success',
+        });
       }
-    } catch (error) {
-      const { message } = error.response.data;
-      showAlert({ text: message || 'there was an error', type: 'danger' });
-      setLoading(false);
+      setFormData({ email: '', password: '' });
+      saveUser(data.tokenUser);
+    } else {
+      showAlert({ text: data || 'there was an error', type: 'danger' });
     }
+    setLoading(false);
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import BlogCard from '../components/BlogCard';
+import BlogCard from '../../../components/molecules/Blogs/BlogCard';
 import { Link } from 'react-router-dom';
 
 const UserBlogsTab = ({ blogs, isPersonalPage }) => {

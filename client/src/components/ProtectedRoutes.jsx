@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useGlobalContext } from '../utils/contextHook';
-import Spinner from './Spinner';
+import Spinner from '../components/atoms/Spinner';
 
 const PrivateRoute = ({ children }) => {
   const { user, isLoading } = useGlobalContext();

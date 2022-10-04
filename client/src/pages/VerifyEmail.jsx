@@ -1,8 +1,8 @@
 import { useLocation, Link } from 'react-router-dom';
 import { useGlobalContext } from '../utils/contextHook';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
-import Spinner from '../components/Spinner';
+import Spinner from '../components/atoms/Spinner';
+import { verifyEmail } from '../actions/auth';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -17,13 +17,14 @@ const VerifyEmail = () => {
 
   const verifyToken = async () => {
     setLoading(true);
-    try {
-      const { data } = await axios.post('/auth/verify-email', {
-        verificationToken: query.get('token'),
-        email: query.get('email'),
-      });
+    const formData = {
+      verificationToken: query.get('token'),
+      email: query.get('email'),
+    };
+    const { status, data } = await verifyEmail(formData);
+    if (status === 'success') {
       setMessage(data.status);
-    } catch (error) {
+    } else {
       setError(true);
     }
     setLoading(false);

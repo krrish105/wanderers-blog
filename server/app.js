@@ -38,7 +38,7 @@ app.use(json());
 app.use(xss());
 app.use(mongoSanitize());
 
-app.use("/auth", authRouter);
+app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/blogs", blogRouter);
 app.use(notFoundError);

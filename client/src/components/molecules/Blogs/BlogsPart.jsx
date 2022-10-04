@@ -1,10 +1,10 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
-import useLocalState from '../utils/localState';
+import useLocalState from '../../../utils/localState';
 import BlogCard from './BlogCard';
-import Alert from './Alert';
-import InputComponent from './InputComponent';
-import Spinner from './Spinner';
+import Alert from '../../atoms/Alert';
+import InputComponent from '../../atoms/InputComponent';
+import Spinner from '../../atoms/Spinner';
+import { getAllBlogs } from '../../../actions/blog';
 
 const BlogsPart = () => {
   const [blogs, setBlogs] = useState([]);
@@ -15,23 +15,13 @@ const BlogsPart = () => {
   const getBlogs = async () => {
     hideAlert();
     setLoading(true);
-    try {
-      const { data } = await axios.get('/api/v1/blogs?search=' + searchText);
-      if (data.status === 'success' && data.length > 0) {
-        setBlogs(data.data);
-        setFilteredBlogs(data.data);
-      }
+    const { status, data } = await getAllBlogs(searchText);
+    if (status === 'success' && data) {
+      setBlogs(data.data);
+      setFilteredBlogs(data.data);
       hideAlert();
-    } catch (error) {
-      console.log(error);
-      const { message } = error.response.data;
-      if (message) {
-        showAlert({ text: message, type: 'danger' });
-      } else if (error.response.data) {
-        showAlert({ text: error.response.data, type: 'danger' });
-      } else {
-        showAlert({ text: 'There was an error', type: 'danger' });
-      }
+    } else {
+      showAlert({ text: data || 'there was an error', type: 'danger' });
     }
     setLoading(false);
   };
@@ -51,8 +41,9 @@ const BlogsPart = () => {
           el.title.includes(searchText) ||
           el.locationName.includes(searchText) ||
           el.author.name.includes(searchText)
-        )
+        ) {
           return el;
+        }
       });
       if (filteredBlogsData.length > 0) {
         setFilteredBlogs(filteredBlogsData);

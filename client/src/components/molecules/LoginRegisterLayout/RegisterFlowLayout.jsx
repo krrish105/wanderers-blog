@@ -1,4 +1,4 @@
-import LoginPageRight from '../components/LoginPageRight';
+import LoginPageRight from './LoginPageRight';
 
 const RegisterFlowLayout = ({ title, children }) => {
   return (

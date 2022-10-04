@@ -7,7 +7,7 @@ import ErrorPage from '../pages/ErrorPage';
 import EditUserPage from '../pages/EditUserPage';
 import VerifyEmail from '../pages/VerifyEmail';
 import BlogPage from '../pages/BlogPage';
-import UserPage from '../pages/UserPage';
+import UserPage from '../pages/UserPage/UserPage';
 import CreateBlogPage from '../pages/CreateBlogPage';
 import ResetPassword from '../pages/ResetPassword';
 import PrivateRoute from './ProtectedRoutes';

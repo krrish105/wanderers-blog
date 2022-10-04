@@ -1,12 +1,12 @@
 import defaultPic from '../assets/default.jpg';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import InputComponent from '../components/InputComponent';
+import InputComponent from '../components/atoms/InputComponent';
 import { useGlobalContext } from '../utils/contextHook';
 import useLocalState from '../utils/localState';
-import Alert from '../components/Alert';
-import Modal from '../components/Modal';
-import Spinner from '../components/Spinner';
+import Alert from '../components/atoms/Alert';
+import Modal from '../components/atoms/Modal';
+import Spinner from '../components/atoms/Spinner';
+import { editUser } from '../actions/user';
 
 const EditUserPage = () => {
   const { user, saveUser } = useGlobalContext();
@@ -45,27 +45,21 @@ const EditUserPage = () => {
     setLoading(true);
     const { name, email, description } = formData;
     const updatedUser = { name, email, description };
-    try {
-      const { data } = await axios.patch(
-        '/api/v1/user/' + user._id,
-        updatedUser
-      );
-      if (data && data.status === 'Updated User') {
-        showAlert({
-          text: `Updated ${data.user.name}'s profile. Redirecting to HomePage...`,
-          type: 'success',
-        });
-        setLoading(false);
-        saveUser(data.user);
-        setInterval(() => {
-          window.location = `/user/${data.user._id}/user-info`;
-        }, 2000);
-      }
-    } catch (error) {
-      const { message } = error.response.data;
-      showAlert({ text: message || 'there was an error', type: 'danger' });
-      setLoading(false);
+
+    const { status, data } = await editUser(user._id, updatedUser);
+    if (status === 'success' && data) {
+      showAlert({
+        text: `Updated ${data.user.name}'s profile. Redirecting to HomePage...`,
+        type: 'success',
+      });
+      saveUser(data.user);
+      setInterval(() => {
+        window.location = `/user/${data.user._id}/user-info`;
+      }, 2000);
+    } else {
+      showAlert({ text: data || 'there was an error', type: 'danger' });
     }
+    setLoading(false);
   };
 
   const resetHandler = () => {

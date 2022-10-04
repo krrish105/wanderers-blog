@@ -1,6 +1,5 @@
-import axios from 'axios';
 import React, { useContext, useState, useEffect } from 'react';
-
+import { logout, isLoggedIn } from '../actions/auth';
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
@@ -15,21 +14,22 @@ const AppProvider = ({ children }) => {
   };
 
   const fetchUser = async () => {
-    try {
-      const { data } = await axios.get('/auth/isLoggedIn');
+    setIsLoading(true);
+    const { status, data } = await isLoggedIn();
+    if (status === 'success' && data.user) {
       saveUser(data.user);
-    } catch (err) {
+    } else {
       removeUser();
     }
     setIsLoading(false);
   };
 
   const logoutUser = async () => {
-    try {
-      await axios.delete('/auth/logout');
+    const { status, data } = await logout();
+    if (status === 'success') {
       removeUser();
-    } catch (error) {
-      console.log(error);
+    } else {
+      console.log(data.message || 'There was an errror');
     }
   };
 

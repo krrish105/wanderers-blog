@@ -1,6 +1,8 @@
 import sendEmail from "./sendEmail.js";
 
-const sendResetPasswordEmail = ({ name, email, token, origin }) => {
+const sendResetPasswordEmail = ({ name, email, token }) => {
+	const origin =
+		process.env.NODE_ENV === "production" ? "" : "http://localhost:3000";
 	const resetURL = `${origin}/user/reset-password?token=${token}&email=${email}`;
 	const message = `<p>PLease reset your password by clicking on the following link : 
 	<a href="${resetURL}" target="_blank">Reset Password</a></p>`;

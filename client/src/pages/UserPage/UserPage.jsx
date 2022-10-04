@@ -1,15 +1,15 @@
-import useLocalState from '../utils/localState';
-import axios from 'axios';
-import UserInfo from '../components/UserInfoTab';
+import useLocalState from '../../utils/localState';
+import UserInfo from '../UserPage/tabs/UserInfoTab';
 import { useState, useEffect } from 'react';
-import defaultPic from '../assets/default.jpg';
-import { useGlobalContext } from '../utils/contextHook';
+import defaultPic from '../../assets/default.jpg';
+import { useGlobalContext } from '../../utils/contextHook';
 import { useParams } from 'react-router-dom';
-import UserTabs from '../components/UserTabs';
-import UserBlogsTab from '../components/UserBlogsTab';
-import Modal from '../components/Modal';
-import Alert from '../components/Alert';
-import Spinner from '../components/Spinner';
+import UserTabs from '../UserPage/tabs/UserTabs';
+import UserBlogsTab from '../UserPage/tabs/UserBlogsTab';
+import Modal from '../../components/atoms/Modal';
+import Alert from '../../components/atoms/Alert';
+import Spinner from '../../components/atoms/Spinner';
+import { getParticularUser, deleteParticularUser } from '../../actions/user';
 
 const UserPage = () => {
   const { user } = useGlobalContext();
@@ -22,32 +22,28 @@ const UserPage = () => {
   const getUser = async () => {
     hideAlert();
     setLoading(true);
-    try {
-      const { data } = await axios.get('/api/v1/user/' + id);
+    const { status, data } = await getParticularUser(id);
+    if (status === 'success' && data?.user) {
       setuserData(data.user);
       hideAlert();
-    } catch (error) {
-      const { message } = error.response.data;
-      showAlert({ text: message || 'there was an error', type: 'danger' });
+    } else {
+      showAlert({ text: data || 'there was an error', type: 'danger' });
     }
     setLoading(false);
   };
 
   const confirmHandler = async () => {
-    try {
-      hideAlert();
-      setLoading(true);
-      const { data } = await axios.delete('/api/v1/user/' + userData._id);
-      if (data?.status === 'Account Deleted') {
-        setDeleteUser(false);
-        setLoading(false);
-        window.location = '/';
-      }
-    } catch (error) {
-      const { message } = error.response.data;
-      showAlert({ text: message || 'there was an error', type: 'danger' });
+    hideAlert();
+    setLoading(true);
+    const { status, data } = await deleteParticularUser(userData._id);
+    if (status === 'success') {
+      setDeleteUser(false);
       setLoading(false);
+      window.location = '/';
+    } else {
+      showAlert({ text: data || 'there was an error', type: 'danger' });
     }
+    setLoading(false);
   };
 
   const deleteUserHandler = async () => {

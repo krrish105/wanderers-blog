@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import defaultBlog from '../assets/default-blog.jpg';
-import deleteIcon from '../assets/delete-icon.svg';
-import Modal from './Modal';
-import useLocalState from '../utils/localState';
-import axios from 'axios';
-import Alert from '../components/Alert';
+import defaultBlog from '../../../assets/default-blog.jpg';
+import { DeleteIcon } from '../../vectors/deleteIcon';
+import Modal from '../../atoms/Modal';
+import useLocalState from '../../../utils/localState';
+import Alert from '../../atoms/Alert';
+import { deleteBlog } from '../../../actions/blog';
 
 const BlogCard = ({ blog, isMainUser }) => {
   const [showModal, setShowModal] = useState(false);
@@ -13,25 +13,21 @@ const BlogCard = ({ blog, isMainUser }) => {
 
   const deleteBlogHandler = async (e) => {
     setShowModal(false);
-    try {
-      hideAlert();
-      setLoading(true);
-      const { data } = await axios.delete('/api/v1/blogs/' + blog._id);
-      if (data && data.status === 'deleted') {
-        showAlert({
-          text: `Deleted Blog.`,
-          type: 'success',
-        });
-        setLoading(false);
-        setInterval(() => {
-          window.location.reload(true);
-        }, 1000);
-      }
-    } catch (error) {
-      const { message } = error.response.data;
-      showAlert({ text: message || 'there was an error', type: 'danger' });
-      setLoading(false);
+    hideAlert();
+    setLoading(true);
+    const { status, data } = await deleteBlog(blog._id);
+    if (data && status === 'deleted') {
+      showAlert({
+        text: `Deleted Blog.`,
+        type: 'success',
+      });
+      setInterval(() => {
+        window.location.reload(true);
+      }, 1000);
+    } else {
+      showAlert({ text: data || 'there was an error', type: 'danger' });
     }
+    setLoading(false);
   };
 
   const closeHandler = () => {
@@ -63,7 +59,7 @@ const BlogCard = ({ blog, isMainUser }) => {
             className="absolute right-3 top-3 border-0 p-0 z-10"
             onClick={() => setShowModal(true)}
           >
-            <img src={deleteIcon} alt="delete blog" width={24} />
+            <DeleteIcon />
           </button>
         )}
         <div className="image-blog">

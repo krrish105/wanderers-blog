@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import InputComponent from '../components/InputComponent';
-import axios from 'axios';
+import InputComponent from '../components/atoms/InputComponent';
 import useLocalState from '../utils/localState';
-import Alert from '../components/Alert';
-import Spinner from '../components/Spinner';
+import Alert from '../components/atoms/Alert';
+import Spinner from '../components/atoms/Spinner';
+import { createBlog } from '../actions/blog';
 
 const CreateBlogPage = () => {
   const [formData, setFormData] = useState({
@@ -34,20 +34,18 @@ const CreateBlogPage = () => {
     hideAlert();
     setLoading(true);
     const blogData = { title, locationName, blogDesc };
-    try {
-      const { data } = await axios.post('/api/v1/blogs/create', blogData);
-      if (data && data.status === 'CREATED') {
-        showAlert({
-          text: `Created Blog ${data.blog.title}. Redirecting to blog page...`,
-          type: 'success',
-        });
-        setInterval(() => {
-          window.location = '/blogs/' + data.blog._id;
-        }, 2000);
-      }
-    } catch (error) {
-      const { message } = error.response.data;
-      showAlert({ text: message || 'there was an error', type: 'danger' });
+    const { status, data } = await createBlog(blogData);
+    if (data && status === 'success') {
+      showAlert({
+        text: `Created Blog ${data.blog.title}. Redirecting to blog page...`,
+        type: 'success',
+      });
+      setInterval(() => {
+        window.location = '/blogs/' + data.blog._id;
+      }, 2000);
+      hideAlert();
+    } else {
+      showAlert({ text: data || 'there was an error', type: 'danger' });
     }
     setLoading(false);
   };

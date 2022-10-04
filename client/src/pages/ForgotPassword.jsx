@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import InputComponent from '../components/InputComponent';
+import InputComponent from '../components/atoms/InputComponent';
 import useLocalState from '../utils/localState';
 import { useGlobalContext } from '../utils/contextHook';
-import axios from 'axios';
-import Alert from '../components/Alert';
-import Spinner from '../components/Spinner';
+import Alert from '../components/atoms/Alert';
+import Spinner from '../components/atoms/Spinner';
+import { forgotPassword } from '../actions/auth';
 
 const ForgotPassword = () => {
   const { isLoading, user, saveUser } = useGlobalContext();
@@ -27,21 +27,18 @@ const ForgotPassword = () => {
     const { email } = formData;
     const resetUser = { email };
 
-    try {
-      const { data } = await axios.post('/auth/forgot-password', resetUser);
-      if (data) {
-        setFormData({ email: '' });
-        setLoading(false);
-        showAlert({
-          text: data.status,
-          type: 'success',
-        });
-        saveUser(data.tokenUser);
-      }
-    } catch (error) {
-      const { message } = error.response.data;
-      showAlert({ text: message || 'there was an error', type: 'danger' });
+    const { status, data } = await forgotPassword(resetUser);
+    if (data && status === 'success') {
+      setFormData({ email: '' });
+      showAlert({
+        text: data.status,
+        type: 'success',
+      });
+      saveUser(data.tokenUser);
+    } else {
+      showAlert({ text: data || 'there was an error', type: 'danger' });
     }
+    setLoading(false);
   };
 
   useEffect(() => {

@@ -31,15 +31,12 @@ const register = async (req, res) => {
 		password,
 		verificationToken: createHash(verificationToken),
 		verificationTokenExpirationDate,
-
 	});
 
-	const origin = "http://localhost:3000";
 	await sendVerificationEmail({
 		name: user.name,
 		email: user.email,
 		verificationToken: user.verificationToken,
-		origin,
 	});
 	res.status(StatusCodes.CREATED).json({ status: "Registered" });
 };
@@ -104,13 +101,10 @@ const login = async (req, res) => {
 		user.verificationTokenExpirationDate = verificationTokenExpirationDate;
 		await user.save();
 
-		const origin = "http://localhost:3000";
-
 		await sendVerificationEmail({
 			name: user.name,
 			email: user.email,
 			verificationToken: user.verificationToken,
-			origin,
 		});
 
 		return res.status(StatusCodes.OK).json({
@@ -181,12 +175,10 @@ const forgotPassword = async (req, res) => {
 		await user.save();
 	}
 
-	const origin = "http://localhost:3000";
 	await sendResetPasswordEmail({
 		name: user.name,
 		email: user.email,
 		token: user.passwordToken,
-		origin,
 	});
 	res
 		.status(StatusCodes.OK)
@@ -240,7 +232,7 @@ const isLoggedIn = async (req, res) => {
 		}
 	}
 
-	res.status(StatusCodes.OK).json({ user: dbUser });
+	res.status(StatusCodes.OK).json({ status: "success", user: dbUser });
 };
 
 export {

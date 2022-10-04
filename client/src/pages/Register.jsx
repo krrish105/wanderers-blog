@@ -1,11 +1,11 @@
-import InputComponent from '../components/InputComponent';
+import InputComponent from '../components/atoms/InputComponent';
 import { useState, useEffect } from 'react';
-import RegisterFlowLayout from '../components/RegisterFlowLayout';
-import axios from 'axios';
+import RegisterFlowLayout from '../components/molecules/LoginRegisterLayout/RegisterFlowLayout';
 import useLocalState from '../utils/localState';
 import { useGlobalContext } from '../utils/contextHook';
-import Alert from '../components/Alert';
-import Spinner from '../components/Spinner';
+import Alert from '../components/atoms/Alert';
+import Spinner from '../components/atoms/Spinner';
+import { register } from '../actions/auth';
 
 const Register = () => {
   const { saveUser } = useGlobalContext();
@@ -15,15 +15,7 @@ const Register = () => {
     password: '',
   });
 
-  const {
-    alert,
-    showAlert,
-    loading,
-    setLoading,
-    success,
-    setSuccess,
-    hideAlert,
-  } = useLocalState();
+  const { alert, showAlert, loading, setLoading, hideAlert } = useLocalState();
   const inputHandler = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -37,20 +29,17 @@ const Register = () => {
     setLoading(true);
     const { name, email, password } = formData;
     const registerUser = { name, email, password };
-    try {
-      const { data } = await axios.post('/auth/register', registerUser);
-      if (data && data.status === 'Registered') {
-        setSuccess(true);
-        setFormData({ name: '', email: '', password: '' });
-        showAlert({
-          text: `Please verify your email`,
-          type: 'success',
-        });
-        saveUser(data.tokenUser);
-      }
-    } catch (error) {
-      const { message } = error.response.data;
-      showAlert({ text: message || 'there was an error', type: 'danger' });
+
+    const { status, data } = await register(registerUser);
+    if (data && status === 'success') {
+      setFormData({ name: '', email: '', password: '' });
+      showAlert({
+        text: `Please verify your email`,
+        type: 'success',
+      });
+      saveUser(data.tokenUser);
+    } else {
+      showAlert({ text: data || 'there was an error', type: 'danger' });
     }
     setLoading(false);
   };

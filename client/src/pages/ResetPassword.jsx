@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import InputComponent from '../components/InputComponent';
+import InputComponent from '../components/atoms/InputComponent';
 import useLocalState from '../utils/localState';
-import axios from 'axios';
-import Alert from '../components/Alert';
+import Alert from '../components/atoms/Alert';
 import { useLocation } from 'react-router-dom';
-
-import Spinner from '../components/Spinner';
+import { resetPassword } from '../actions/auth';
+import Spinner from '../components/atoms/Spinner';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -40,23 +39,20 @@ const ResetPassword = () => {
       password,
     };
 
-    try {
-      const { data } = await axios.post('/auth/reset-password', resetUser);
-      if (data && data.status === 'Password updated') {
-        setFormData({ password: '' });
-        setLoading(false);
-        showAlert({
-          text: `Password updated. Redirecting to Login Page...`,
-          type: 'success',
-        });
-        setInterval(() => {
-          window.location = '/login';
-        }, 2000);
-      }
-    } catch (error) {
-      const { message } = error.response.data;
-      showAlert({ text: message || 'there was an error', type: 'danger' });
+    const { status, data } = await resetPassword(resetUser);
+    if (data && status === 'success') {
+      setFormData({ password: '' });
+      showAlert({
+        text: `Password updated. Redirecting to Login Page...`,
+        type: 'success',
+      });
+      setInterval(() => {
+        window.location = '/login';
+      }, 2000);
+    } else {
+      showAlert({ text: data || 'there was an error', type: 'danger' });
     }
+    setLoading(false);
   };
 
   return (

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import useLocalState from '../utils/localState';
-import axios from 'axios';
-import Spinner from '../components/Spinner';
-import Alert from '../components/Alert';
+import Spinner from '../components/atoms/Spinner';
+import Alert from '../components/atoms/Alert';
+import { getParticularBlog } from '../actions/blog';
 
 const BlogPage = () => {
   const blogID = useParams();
@@ -12,18 +12,14 @@ const BlogPage = () => {
 
   const getBlog = async () => {
     setLoading(true);
-    try {
-      const { data } = await axios.get('/api/v1/blogs/' + blogID.id);
-      if (data.status === 'success' && data.blog) {
-        setBlog([data.blog]);
-      }
+    const { status, data } = await getParticularBlog(blogID.id);
+    if (status === 'success' && data.blog) {
+      setBlog([data.blog]);
       hideAlert();
-      setLoading(false);
-    } catch (error) {
-      const { message } = error.response.data;
-      showAlert({ text: message || 'there was an error', type: 'danger' });
-      setLoading(false);
+    } else {
+      showAlert({ text: data || 'there was an error', type: 'danger' });
     }
+    setLoading(false);
   };
 
   useEffect(() => {
