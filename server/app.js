@@ -38,6 +38,9 @@ app.use(json());
 app.use(xss());
 app.use(mongoSanitize());
 
+app.get("/", (req, res) => {
+	res.status("200").send("Hello");
+});
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/blogs", blogRouter);
