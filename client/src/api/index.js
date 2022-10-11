@@ -10,27 +10,35 @@ const API = axios.create({
 });
 
 // Auth
-export const login = (loginUser) => API.post('/auth/login', loginUser);
+export const login = (loginUser) =>
+  API.post('/auth/login', loginUser, { withCredentials: true });
 export const register = (registerUser) =>
-  API.post('/auth/register', registerUser);
+  API.post('/auth/register', registerUser, { withCredentials: true });
 export const forgotPassword = (resetUser) =>
-  API.post('/auth/forgot-password', resetUser);
+  API.post('/auth/forgot-password', resetUser, { withCredentials: true });
 export const resetPassword = (resetUser) =>
-  API.post('/auth/reset-password', resetUser);
+  API.post('/auth/reset-password', resetUser, { withCredentials: true });
 export const verifyEmail = (formData) =>
-  API.post('/auth/verify-email', formData);
-export const isLoggedIn = () => API.get('/auth/isLoggedIn');
-export const logout = () => API.delete('/auth/logout');
+  API.post('/auth/verify-email', formData, { withCredentials: true });
+export const isLoggedIn = () =>
+  API.get('/auth/isLoggedIn', { withCredentials: true });
+export const logout = () =>
+  API.delete('/auth/logout', { withCredentials: true });
 
 // ========== User ==========
-export const deleteUser = (id) => API.delete('/user/' + id);
-export const getUser = (id) => API.get('/user/' + id);
+export const deleteUser = (id) =>
+  API.delete('/user/' + id, { withCredentials: true });
+export const getUser = (id) =>
+  API.get('/user/' + id, { withCredentials: true });
 export const editUser = (id, updatedUser) =>
-  API.patch('/user/' + id, updatedUser);
+  API.patch('/user/' + id, updatedUser, { withCredentials: true });
 
 // ========== Blogs ==========
-export const deleteBlog = (id) => API.delete('/blogs/' + id);
+export const deleteBlog = (id) =>
+  API.delete('/blogs/' + id, { withCredentials: true });
 export const getAllBlogs = (searchText) =>
-  API.get('/blogs?search=' + searchText);
-export const getBlog = (id) => API.get('/blogs/' + id);
-export const createBlog = (blogData) => API.post('/blogs/create', blogData);
+  API.get('/blogs?search=' + searchText, { withCredentials: true });
+export const getBlog = (id) =>
+  API.get('/blogs/' + id, { withCredentials: true });
+export const createBlog = (blogData) =>
+  API.post('/blogs/create', blogData, { withCredentials: true });

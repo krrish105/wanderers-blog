@@ -28,10 +28,16 @@ const limiter = rateLimit({
 	max: 100,
 });
 
+app.set("trust proxy", 1);
 app.disable("x-powered-by");
 app.use(limiter);
 app.use(helmet());
-app.use(cors());
+app.use(
+	cors({
+		credentials: true,
+		origin: [process.env.FRONTEND_APP_URL, process.env.FRONTEND_APP_LOCAL_URL],
+	})
+);
 app.use(morgan("dev"));
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(json());
