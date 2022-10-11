@@ -34,7 +34,7 @@ app.use(limiter);
 app.use(helmet());
 app.use(
 	cors({
-		credentials: true,
+		// credentials: true,
 		origin: [process.env.FRONTEND_APP_URL, process.env.FRONTEND_APP_LOCAL_URL],
 	})
 );
