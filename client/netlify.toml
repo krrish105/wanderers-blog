@@ -1,0 +1,15 @@
+[build]
+  base = "client"
+  publish = "client/build"
+  command = "npm run build"
+
+[[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
+
+[[redirects]]
+    from = "/api/*"
+    to = "https://wanderers-blog-api.herokuapp.com/"
+    status = 200
+    force = true
