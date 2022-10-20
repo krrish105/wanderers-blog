@@ -11,6 +11,7 @@ export const editUser = async (id, updatedUser) => {
     return { status: 'error', data: message || 'There was an error' };
   }
 };
+
 export const getParticularUser = async (id) => {
   try {
     const { data } = await api.getUser(id);
@@ -22,6 +23,7 @@ export const getParticularUser = async (id) => {
     return { status: 'error', data: message || 'There was an error' };
   }
 };
+
 export const deleteParticularUser = async (id) => {
   try {
     const { data } = await api.deleteUser(id);

@@ -35,6 +35,7 @@ export const getParticularBlog = async (id) => {
     return { status: 'error', data: message || 'There was an error' };
   }
 };
+
 export const createBlog = async (blogData) => {
   try {
     const { data } = await api.createBlog(blogData);

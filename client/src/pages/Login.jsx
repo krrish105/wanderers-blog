@@ -41,7 +41,7 @@ const Login = () => {
         });
         setTimeout(() => {
           window.location = '/';
-        }, 4000);
+        }, 3000);
       } else {
         showAlert({
           text: `${data.message}`,

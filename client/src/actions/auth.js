@@ -11,6 +11,7 @@ export const register = async (registerUser) => {
     return { status: 'error', data: message || 'There was an error' };
   }
 };
+
 export const verifyEmail = async (formData) => {
   try {
     const { data } = await api.verifyEmail(formData);
@@ -22,6 +23,7 @@ export const verifyEmail = async (formData) => {
     return { status: 'error', data: message || 'There was an error' };
   }
 };
+
 export const login = async (loginUser) => {
   try {
     const { data } = await api.login(loginUser);
@@ -69,6 +71,7 @@ export const logout = async () => {
     return { status: 'error', data: message || 'There was an error' };
   }
 };
+
 export const isLoggedIn = async () => {
   try {
     const { data } = await api.isLoggedIn();
