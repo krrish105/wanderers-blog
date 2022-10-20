@@ -32,7 +32,15 @@ app.set("trust proxy", 1);
 app.disable("x-powered-by");
 app.use(limiter);
 app.use(helmet());
-app.use(cors());
+app.use(
+	cors({
+		origin:
+			process.env.NODE_ENV === "production"
+				? "https://wanderers-blog.netlify.app"
+				: "http://localhost:3000",
+		credentials: true,
+	})
+);
 app.use(morgan("dev"));
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(json());
