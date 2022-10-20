@@ -1,17 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from '../pages/HomePage';
-import Login from '../pages/Login';
-import Register from '../pages/Register';
-import Layout from '../pages/Layout';
-import ErrorPage from '../pages/ErrorPage';
-import EditUserPage from '../pages/EditUserPage';
-import VerifyEmail from '../pages/VerifyEmail';
-import BlogPage from '../pages/BlogPage';
-import UserPage from '../pages/UserPage/UserPage';
-import CreateBlogPage from '../pages/CreateBlogPage';
-import ResetPassword from '../pages/ResetPassword';
+import Layout from '../../molecules/Layout/Layout';
+import ErrorPage from '../../../pages/Error/ErrorPage';
+import HomePage from '../../../pages/Homepage/HomePage';
+import Login from '../../../pages/Login/Login';
+import Register from '../../../pages/Register/Register';
+import EditUserPage from '../../../pages/EditUser/EditUserPage';
+import VerifyEmail from '../../../pages/VerifyEmail/VerifyEmail';
+import BlogPage from '../../../pages/Blog/BlogPage';
+import UserPage from '../../../pages/User/UserPage';
+import CreateBlogPage from '../../../pages/CreateBlog/CreateBlogPage';
+import ResetPassword from '../../../pages/ResetPassword/ResetPassword';
 import PrivateRoute from './ProtectedRoutes';
-import ForgotPassword from '../pages/ForgotPassword';
+import ForgotPassword from '../../../pages/ForgotPassword/ForgotPassword';
 
 const Routers = () => {
   return (

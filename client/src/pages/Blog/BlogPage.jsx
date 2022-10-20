@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import useLocalState from '../utils/localState';
-import Spinner from '../components/atoms/Spinner';
-import Alert from '../components/atoms/Alert';
-import { getParticularBlog } from '../actions/blog';
+import useLocalState from '../../utils/localState';
+import Spinner from '../../components/atoms/Spinner';
+import Alert from '../../components/atoms/Alert';
+import { getParticularBlog } from '../../actions/blog';
 
 const BlogPage = () => {
   const blogID = useParams();

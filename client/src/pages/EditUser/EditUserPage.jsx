@@ -1,12 +1,12 @@
-import defaultPic from '../assets/default.jpg';
+import defaultPic from '../../assets/default.jpg';
 import { useEffect, useState } from 'react';
-import InputComponent from '../components/atoms/InputComponent';
-import { useGlobalContext } from '../utils/contextHook';
-import useLocalState from '../utils/localState';
-import Alert from '../components/atoms/Alert';
-import Modal from '../components/atoms/Modal';
-import Spinner from '../components/atoms/Spinner';
-import { editUser } from '../actions/user';
+import InputComponent from '../../components/atoms/InputComponent';
+import { useGlobalContext } from '../../utils/contextHook';
+import useLocalState from '../../utils/localState';
+import Alert from '../../components/atoms/Alert';
+import Modal from '../../components/atoms/Modal';
+import Spinner from '../../components/atoms/Spinner';
+import { editUser } from '../../actions/user';
 
 const EditUserPage = () => {
   const { user, saveUser } = useGlobalContext();

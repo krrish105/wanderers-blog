@@ -1,6 +1,6 @@
-import errorGif from '../assets/error.gif';
+import errorGif from '../../assets/error.gif';
 import { useEffect } from 'react';
-import notFound from '../assets/404-error.gif';
+import notFound from '../../assets/404-error.gif';
 
 const ErrorPage = ({ notFoundPage = false }) => {
   useEffect(() => {

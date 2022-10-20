@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import BlogsPart from '../components/molecules/Blogs/BlogsPart';
+import BlogsPart from '../../components/molecules/Blogs/BlogsPart';
 
 const HomePage = () => {
   useEffect(() => {

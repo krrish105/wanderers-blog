@@ -1,11 +1,11 @@
-import InputComponent from '../components/atoms/InputComponent';
+import InputComponent from '../../components/atoms/InputComponent';
 import { useState, useEffect } from 'react';
-import RegisterFlowLayout from '../components/molecules/LoginRegisterLayout/RegisterFlowLayout';
-import useLocalState from '../utils/localState';
-import { useGlobalContext } from '../utils/contextHook';
-import Alert from '../components/atoms/Alert';
-import Spinner from '../components/atoms/Spinner';
-import { register } from '../actions/auth';
+import RegisterFlowLayout from '../../components/molecules/LoginRegisterLayout/RegisterFlowLayout';
+import useLocalState from '../../utils/localState';
+import { useGlobalContext } from '../../utils/contextHook';
+import Alert from '../../components/atoms/Alert';
+import Spinner from '../../components/atoms/Spinner';
+import { register } from '../../actions/auth';
 
 const Register = () => {
   const { saveUser } = useGlobalContext();

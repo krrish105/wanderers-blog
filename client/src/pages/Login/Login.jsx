@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import InputComponent from '../components/atoms/InputComponent';
-import RegisterFlowLayout from '../components/molecules/LoginRegisterLayout/RegisterFlowLayout';
-import { useGlobalContext } from '../utils/contextHook';
-import useLocalState from '../utils/localState';
+import InputComponent from '../../components/atoms/InputComponent';
+import RegisterFlowLayout from '../../components/molecules/LoginRegisterLayout/RegisterFlowLayout';
+import { useGlobalContext } from '../../utils/contextHook';
+import useLocalState from '../../utils/localState';
 import { Link } from 'react-router-dom';
-import Alert from '../components/atoms/Alert';
-import Spinner from '../components/atoms/Spinner';
-import { login } from '../actions/auth';
+import Alert from '../../components/atoms/Alert';
+import Spinner from '../../components/atoms/Spinner';
+import { login } from '../../actions/auth';
 
 const Login = () => {
   const { isLoading, user, saveUser } = useGlobalContext();

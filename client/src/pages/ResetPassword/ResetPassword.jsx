@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import InputComponent from '../components/atoms/InputComponent';
-import useLocalState from '../utils/localState';
-import Alert from '../components/atoms/Alert';
+import InputComponent from '../../components/atoms/InputComponent';
+import useLocalState from '../../utils/localState';
+import Alert from '../../components/atoms/Alert';
 import { useLocation } from 'react-router-dom';
-import { resetPassword } from '../actions/auth';
-import Spinner from '../components/atoms/Spinner';
+import { resetPassword } from '../../actions/auth';
+import Spinner from '../../components/atoms/Spinner';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);

@@ -1,11 +1,11 @@
 import useLocalState from '../../utils/localState';
-import UserInfo from '../UserPage/tabs/UserInfoTab';
+import UserInfo from './tabs/UserInfoTab';
 import { useState, useEffect } from 'react';
 import defaultPic from '../../assets/default.jpg';
 import { useGlobalContext } from '../../utils/contextHook';
 import { useParams } from 'react-router-dom';
-import UserTabs from '../UserPage/tabs/UserTabs';
-import UserBlogsTab from '../UserPage/tabs/UserBlogsTab';
+import UserTabs from './tabs/UserTabs';
+import UserBlogsTab from './tabs/UserBlogsTab';
 import Modal from '../../components/atoms/Modal';
 import Alert from '../../components/atoms/Alert';
 import Spinner from '../../components/atoms/Spinner';

@@ -1,8 +1,8 @@
 import { useLocation, Link } from 'react-router-dom';
-import { useGlobalContext } from '../utils/contextHook';
+import { useGlobalContext } from '../../utils/contextHook';
 import { useState, useEffect } from 'react';
-import Spinner from '../components/atoms/Spinner';
-import { verifyEmail } from '../actions/auth';
+import Spinner from '../../components/atoms/Spinner';
+import { verifyEmail } from '../../actions/auth';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);

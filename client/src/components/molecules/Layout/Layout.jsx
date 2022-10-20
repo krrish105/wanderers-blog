@@ -1,4 +1,4 @@
-import Navigation from '../components/molecules/Navigation/Navigation';
+import Navigation from '../Navigation/Navigation';
 import { Outlet } from 'react-router-dom';
 
 const Layout = () => {

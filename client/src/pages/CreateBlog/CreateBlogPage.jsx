@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import InputComponent from '../components/atoms/InputComponent';
-import useLocalState from '../utils/localState';
-import Alert from '../components/atoms/Alert';
-import Spinner from '../components/atoms/Spinner';
-import { createBlog } from '../actions/blog';
+import InputComponent from '../../components/atoms/InputComponent';
+import useLocalState from '../../utils/localState';
+import Alert from '../../components/atoms/Alert';
+import Spinner from '../../components/atoms/Spinner';
+import { createBlog } from '../../actions/blog';
 
 const CreateBlogPage = () => {
   const [formData, setFormData] = useState({

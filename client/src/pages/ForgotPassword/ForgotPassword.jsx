@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import InputComponent from '../components/atoms/InputComponent';
-import useLocalState from '../utils/localState';
-import { useGlobalContext } from '../utils/contextHook';
-import Alert from '../components/atoms/Alert';
-import Spinner from '../components/atoms/Spinner';
-import { forgotPassword } from '../actions/auth';
+import InputComponent from '../../components/atoms/InputComponent';
+import useLocalState from '../../utils/localState';
+import { useGlobalContext } from '../../utils/contextHook';
+import Alert from '../../components/atoms/Alert';
+import Spinner from '../../components/atoms/Spinner';
+import { forgotPassword } from '../../actions/auth';
 
 const ForgotPassword = () => {
   const { isLoading, user, saveUser } = useGlobalContext();
