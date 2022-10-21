@@ -140,7 +140,7 @@ const logout = async (req, res) => {
 	await Token.findOneAndDelete({
 		user: req.user.userID,
 	});
-	const { refreshToken, accessToken } = req.signedCookies;
+	let { refreshToken, accessToken } = req.signedCookies;
 
 	refreshToken = null;
 	accessToken = null;
