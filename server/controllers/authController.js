@@ -140,20 +140,27 @@ const logout = async (req, res) => {
 	await Token.findOneAndDelete({
 		user: req.user.userID,
 	});
+	const { refreshToken, accessToken } = req.signedCookies;
+
+	refreshToken = null;
+	accessToken = null;
 
 	res.cookie("accessToken", null, {
 		httpOnly: true,
-		secure: process.env.NODE_ENV === "production",
-		signed: true,
 		expires: new Date(Date.now()),
+		secure: true,
+		signed: true,
+		sameSite: "none",
 	});
 
 	res.cookie("refreshToken", null, {
 		httpOnly: true,
 		expires: new Date(Date.now()),
-		secure: process.env.NODE_ENV === "production",
+		secure: true,
 		signed: true,
+		sameSite: "none",
 	});
+
 	req.user = null;
 	res.status(StatusCodes.OK).json({ status: "logout" });
 };
