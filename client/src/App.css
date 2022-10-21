@@ -210,6 +210,7 @@ nav {
   overflow: hidden;
   white-space: nowrap;
   display: block;
+  max-width: 240px;
 }
 
 .login-page-bg-overlay {

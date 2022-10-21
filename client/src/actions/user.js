@@ -27,7 +27,7 @@ export const getParticularUser = async (id) => {
 export const deleteParticularUser = async (id) => {
   try {
     const { data } = await api.deleteUser(id);
-    if (data && data.status === 'success') {
+    if (data && data.status === 'Account Deleted') {
       return { status: 'success', data };
     }
   } catch (error) {

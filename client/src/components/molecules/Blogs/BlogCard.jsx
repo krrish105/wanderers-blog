@@ -16,7 +16,7 @@ const BlogCard = ({ blog, isMainUser }) => {
     hideAlert();
     setLoading(true);
     const { status, data } = await deleteBlog(blog._id);
-    if (data && status === 'deleted') {
+    if (status === 'success') {
       showAlert({
         text: `Deleted Blog.`,
         type: 'success',
@@ -56,7 +56,7 @@ const BlogCard = ({ blog, isMainUser }) => {
       <div className="relative blog-card">
         {isMainUser && (
           <button
-            className="absolute right-3 top-3 border-0 p-0 z-10"
+            className="absolute right-3 top-5 border-0 p-0 w-5 z-30"
             onClick={() => setShowModal(true)}
           >
             <DeleteIcon />

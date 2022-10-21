@@ -33,21 +33,22 @@ const CreateBlogPage = () => {
     const { title, locationName, blogDesc } = formData;
     hideAlert();
     setLoading(true);
-    const blogData = { title, locationName, blogDesc };
-    const { status, data } = await createBlog(blogData);
-    if (data && status === 'success') {
-      showAlert({
-        text: `Created Blog ${data.blog.title}. Redirecting to blog page...`,
-        type: 'success',
-      });
-      setInterval(() => {
-        window.location = '/blogs/' + data.blog._id;
-      }, 2000);
-      hideAlert();
-    } else {
-      showAlert({ text: data || 'there was an error', type: 'danger' });
+
+    if (title && locationName && blogDesc) {
+      const { status, data } = await createBlog(formData);
+      if (data && status === 'success') {
+        showAlert({
+          text: `Created Blog ${data.blog.title}. Redirecting to blog page...`,
+          type: 'success',
+        });
+        setInterval(() => {
+          window.location = '/blogs/' + data.blog._id;
+        }, 2000);
+      } else {
+        showAlert({ text: data || 'there was an error', type: 'danger' });
+      }
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (

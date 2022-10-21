@@ -49,7 +49,7 @@ const EditUserPage = () => {
     const { status, data } = await editUser(user._id, updatedUser);
     if (status === 'success' && data) {
       showAlert({
-        text: `Updated ${data.user.name}'s profile. Redirecting to HomePage...`,
+        text: `Updated ${data.user.name}'s profile. Redirecting to Profile Page...`,
         type: 'success',
       });
       saveUser(data.user);

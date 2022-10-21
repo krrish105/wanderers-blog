@@ -10,7 +10,7 @@ const UserInfo = ({ userdata, deleteUserHandler, isMainUser }) => {
         <h2 className="text-2xl">{userdata.name}</h2>
         {isMainUser && <div>{userdata.email}</div>}
         <section className="about-user-section">
-          <h2>About Me</h2>
+          <h2>About:</h2>
           {userdata.description ? (
             <div className="p-7">
               <pre className="whitespace-pre-wrap">{userdata.description}</pre>
