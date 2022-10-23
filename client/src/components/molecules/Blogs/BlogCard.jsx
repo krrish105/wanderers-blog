@@ -36,15 +36,13 @@ const BlogCard = ({ blog, isMainUser }) => {
 
   return (
     <>
-      {showModal && (
-        <Modal
-          show={showModal}
-          close={closeHandler}
-          title="Delete Blog"
-          text={`Are you sure you want to delete the ${blog.title} blog?`}
-          confirm={deleteBlogHandler}
-        />
-      )}
+      <Modal
+        show={showModal}
+        close={closeHandler}
+        title="Delete Blog"
+        text={`Are you sure you want to delete the ${blog.title} blog?`}
+        confirm={deleteBlogHandler}
+      />
       {alert.show && (
         <Alert
           type={alert.type}

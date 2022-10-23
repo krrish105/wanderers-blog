@@ -5,7 +5,7 @@ const Modal = ({ show = false, close, title, text, confirm }) => {
     if (show) {
       document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = 'scroll';
+      document.body.style.overflow = 'auto';
     }
   }, [show]);
 
