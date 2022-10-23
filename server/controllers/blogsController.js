@@ -12,7 +12,7 @@ const getAllBlogs = async (req, res) => {
 	const regex = new RegExp(search, "i");
 
 	const blogs = await Blogs.find({ title: { $regex: regex } })
-		.populate("author", "_id name email numOfBlogs isVerified description")
+		.populate("author", "_id name email numOfBlogs description")
 		.sort("title");
 
 	if (blogs.length < 1) {

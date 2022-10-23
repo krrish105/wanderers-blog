@@ -8,10 +8,7 @@
   - [Links](#links)
 - [My process](#my-process)
   - [Built with](#built-with)
-  - [What I learned](#what-i-learned)
-  - [Useful resources](#useful-resources)
 - [Author](#author)
-- [Acknowledgments](#acknowledgments)
 
 ## Overview
 
@@ -21,12 +18,16 @@ Users should be able to:
 
 - View the optimal layout depending on their device's screen size
 - See hover states for interactive elements
-- See other user's travel blogs
-- Register and publish your own travel blog
+- See other user's travel articles
+- Register and Login to the site
+- Reset Password
+- Publish travel articles
+- Delete Account
+- Delete any of your own articles
 
 ### Screenshot
 
-![](./screenshot.jpg)
+![](./screenshot/homepage.png)
 
 ### Links
 
@@ -37,16 +38,22 @@ Users should be able to:
 
 ### Built with
 
-- Semantic HTML5 markup
-- CSS custom properties
-- Flexbox, CSS Grid
-- Mobile-first workflow
-- [React](https://reactjs.org/) - JS library
-- [Tailwind CSS](https://styled-components.com/) - For styles
+- Front-End:
 
-### What I learned
+  - Mobile-first workflow
+  - Semantic HTML5 markup
+  - CSS custom properties
+  - Flexbox, CSS Grid
+  - [React](https://reactjs.org/) - JS library
+  - [Tailwind CSS](https://styled-components.com/) - For styles
 
-### Useful resources
+- Back-End:
+  - [MongoDB](https://www.mongodb.com/)
+  - [Express.js](https://expressjs.com/)
+  - [Nodemailer](https://nodemailer.com/about/)
+  - [Node.js](https://nodejs.org/en/)
+  - [JSON Web Token](https://jwt.io/)
+  - [Mongoose](https://mongoosejs.com/)
 
 ## Author
 
@@ -54,5 +61,3 @@ Users should be able to:
 - Twitter - [@\_karishma10](https://twitter.com/_karishma10)
 - LinkedIn - [Karishma Garg](https://www.linkedin.com/in/karishma-garg-)
 - CodePen - [Krrish105](https://codepen.io/krrish105)
-
-## Acknowledgments
